@@ -1,6 +1,8 @@
 <template>
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-menu-item index="1">处理中心</el-menu-item>
+        <el-menu-item index="/">
+            首页
+        </el-menu-item>
         <el-submenu index="2">
             <template slot="title">我的工作台
             </template>
@@ -18,6 +20,7 @@
         </el-submenu>
         <el-menu-item index="3" disabled>消息中心</el-menu-item>
         <el-menu-item index="4">订单管理</el-menu-item>
+        <el-menu-item index="/about">关于</el-menu-item>
     </el-menu>
 </template>
 
@@ -31,6 +34,7 @@ export default {
     },
     methods: {
         handleSelect(key, keyPath) {
+            this.$router.push(key);
             console.log(key, keyPath);
         }
     }
