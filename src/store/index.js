@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import helloWorldStore from './helloWorldStore'
-import aboutStore from './aboutStore'
+import helloWorldStore from './modules/helloWorldStore'
+import aboutStore from './modules/aboutStore'
 
 Vue.use(Vuex)
 
