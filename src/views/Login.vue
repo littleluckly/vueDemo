@@ -17,6 +17,10 @@
 
 <script>
 	import jsCookie from 'js-cookie'
+	import { createNamespacedHelpers } from 'vuex'
+	const {
+		mapActions
+	} = createNamespacedHelpers('loginStore')
 	export default {
 		data() {
 			var checkAge = (rule, value, callback) => {
@@ -57,7 +61,11 @@
 					if (valid) {
 						jsCookie.set('auth', 'true222')
 						this.$router.push('/')
-						alert('submit!');
+						const { dispatch } = this.$store;
+						dispatch({
+							type: 'toggleLoginStatus',
+							flag: true
+						})
 					} else {
 						console.log('error submit!!');
 						return false;
@@ -66,7 +74,8 @@
 			},
 			resetForm(formName) {
 				this.$refs[formName].resetFields();
-			}
+			},
+			...mapActions(['toggleLoginStatus'])
 		}
 	}
 </script>
