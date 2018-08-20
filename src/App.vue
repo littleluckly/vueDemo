@@ -7,7 +7,7 @@
 			<el-main>
 				<router-view/>
 			</el-main>
-			<el-footer>Footer</el-footer>
+			<el-footer v-if="loginStatus">Footer</el-footer>
 		</el-container>
 	</div>
 </template>
@@ -25,11 +25,6 @@
 		components: {
 			Header
 		},
-		// data(){
-		// 	return {
-		// 		loginStatus: jsCookie.get('auth')
-		// 	}
-		// }
 		beforeCreate() {
 			const {
 				dispatch
@@ -40,7 +35,7 @@
 			})
 		},
 		computed: {
-			loginStatus(ctx) {
+			loginStatus() {
 				return this.$store.getters['loginStore/loginStatus']
 			}
 		},

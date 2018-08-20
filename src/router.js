@@ -34,13 +34,13 @@ router.beforeEach((to, from, next) => {
         if (!jsCookie.get('auth')) {
             next({
                 path: '/login',
-                query: { redirect: to.fullPath }//把要跳转的地址作为参数传到下一步
+                query: { redirect: to.fullPath }
             })
         } else {
-            next() // 确保一定要调用 next()
-          }
+            next()
+        }
     } else {
-      next() // 确保一定要调用 next()
+        next()
     }
 })
 export default router
