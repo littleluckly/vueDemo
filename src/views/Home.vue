@@ -13,7 +13,13 @@
 		name: 'home',
 		components: {
 			HelloWorld
-		}
+		},
+		// beforeRouteEnter (to, from, next) {
+		// 	next({
+		// 		path: '/login',
+		// 		query: { redirect: to.fullPath }//把要跳转的地址作为参数传到下一步
+		// 	})
+		// },
 	}
 </script>
 

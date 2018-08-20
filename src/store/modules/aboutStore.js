@@ -3,15 +3,20 @@ export default {
     state: {
         title: '我是about'
     },
+    getters: {
+        loginStatus: (state, getters, rootState) => {
+            return rootState.loginStatus
+        }
+    },
     mutations: {
         changeTitle (state, payload) {
             state.title = payload.newTitle
         }
     },
     actions: {
-        changeTitle ({state, commit}, payload) {
-            console.log(payload)
-            commit('changeTitle', payload)
+        changeTitle (ctx, payload) {
+            console.log(ctx)
+            ctx.commit('changeTitle', payload)
         }
     }
 }
