@@ -5,7 +5,6 @@ export default {
     },
     mutations: {
         increment (state, payload) {
-            console.log(payload)
             if (payload && payload.amount) {
                 state.count += payload.amount
             } else {

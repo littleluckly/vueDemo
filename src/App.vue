@@ -4,7 +4,7 @@
 			<el-header v-if="loginStatus">
 				<Header/>
 			</el-header>
-			<el-main>
+			<el-main class="mainWrap">
 				<router-view/>
 			</el-main>
 			<el-footer v-if="loginStatus">Footer</el-footer>
@@ -50,6 +50,9 @@
 		width: 1300px;
 		margin: 0 auto;
 	}
+	.el-container{
+		flex-direction: column;
+	}
 	.el-header,
 	.el-footer {
 		/* background-color: #B3C0D1; */
@@ -67,6 +70,7 @@
 		background-color: #E9EEF3;
 		color: #333;
 		text-align: center;
+		min-height: calc(100vh - 50px);
 		/* line-height: 160px; */
 	}
 	body>.el-container {

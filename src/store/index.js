@@ -9,18 +9,19 @@ import loginStore from './modules/loginStore'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+    namespaced: true,
     state: {
         rootCount: 0,
         loginStatus: false
     },
     mutations: {
         toggleLoginStatus (state, payload) {
-            console.log(payload,'payload')
             state.loginStatus = payload.flag
         }
     },
     actions: {
         toggleLoginStatus (ctx, payload) {
+            console.log(payload,'payload111')
             ctx.commit({
                 type: 'toggleLoginStatus',
                 flag: payload.flag

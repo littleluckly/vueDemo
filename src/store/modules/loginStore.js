@@ -6,12 +6,12 @@ export default {
         }
     },
     actions: {
-        toggleLoginStatus ({ dispatch, commit, getters, rootGetters }, flag) {
-            console.log('com')
-            dispatch({
-                type: 'toggleLoginStatus',
-                flag
-            })
-        }
+        // toggleLoginStatus ({ dispatch, commit, getters, rootGetters }, flag) {
+        //     console.log('com')
+        //     dispatch({
+        //         type: 'toggleLoginStatus',
+        //         flag
+        //     })
+        // }
     }
 }
