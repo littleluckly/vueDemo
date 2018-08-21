@@ -3,25 +3,17 @@
         <div class="headerMenuWrap">
             <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
                 <el-menu-item index="/">
-                    首页1
+                    首页
                 </el-menu-item>
                 <el-submenu index="2">
-                    <template slot="title">我的工作台
+                    <template slot="title">跟团游
                     </template>
-                        <el-menu-item index="2-1"><i class="el-icon-edit"></i>选项test1</el-menu-item>
-                        <el-menu-item index="2-2">选项2</el-menu-item>
-                        <el-menu-item index="2-3">选项3</el-menu-item>
-                        <el-submenu index="2-4">
-                            <template slot="title">
-                                选项4
-                            </template>
-                            <el-menu-item index="2-4-1">选项1</el-menu-item>
-                            <el-menu-item index="2-4-2">选项2</el-menu-item>
-                            <el-menu-item index="2-4-3">选项3</el-menu-item>
-                        </el-submenu>
+                        <el-menu-item index="/overseaPackageTour">出境跟团</el-menu-item>
+                        <el-menu-item index="/interPackageTour">国内跟团</el-menu-item>
+                        <el-menu-item index="/aroundPackageTour">周边跟团</el-menu-item>   
                 </el-submenu>
-                <el-menu-item index="3" disabled>消息中心</el-menu-item>
-                <el-menu-item index="4">订单管理</el-menu-item>
+                <el-menu-item index="/freeTour">自由行</el-menu-item>
+                <el-menu-item index="/mailSteamerTour">邮轮游</el-menu-item>
                 <el-menu-item index="/about">关于</el-menu-item>
             </el-menu>
         </div>

@@ -3,6 +3,11 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import About from './views/About.vue'
 import Login from './views/Login.vue'
+import OverseaPackageTour from './views/OverseaPackageTour.vue'
+import InterPackageTour from './views/InterPackageTour.vue'
+import AroundPackageTour from './views/AroundPackageTour.vue'
+import MailSteamerTour from './views/MailSteamerTour.vue'
+import FreeTour from './views/FreeTour.vue'
 
 import jsCookie from 'js-cookie'
 Vue.use(Router)
@@ -25,6 +30,31 @@ const router = new Router({
             path: '/login',
             name: 'Login',
             component: Login
+        },
+        {
+            path: '/overseaPackageTour',
+            name: 'OverseaPackageTour',
+            component: OverseaPackageTour
+        },
+        {
+            path: '/interPackageTour',
+            name: 'InterPackageTour',
+            component: InterPackageTour
+        },
+        {
+            path: '/aroundPackageTour',
+            name: 'AroundPackageTour',
+            component: AroundPackageTour
+        },
+        {
+            path: '/mailSteamerTour',
+            name: 'MailSteamerTour',
+            component: MailSteamerTour
+        },
+        {
+            path: '/freeTour',
+            name: 'FreeTour',
+            component: FreeTour
         }
     ]
 })
