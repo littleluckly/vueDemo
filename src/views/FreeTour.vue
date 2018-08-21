@@ -1,6 +1,6 @@
 <template>
     <div>
-        自由行  
+        自由行   
     </div>
 </template>
 
