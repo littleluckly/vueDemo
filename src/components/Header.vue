@@ -10,7 +10,7 @@
                     </template>
                         <el-menu-item index="/overseaPackageTour">出境跟团</el-menu-item>
                         <el-menu-item index="/interPackageTour">国内跟团</el-menu-item>
-                        <el-menu-item index="/aroundPackageTour">周边跟团</el-menu-item>   
+                        <el-menu-item index="/aroundPackageTour">周边跟团</el-menu-item>
                 </el-submenu>
                 <el-menu-item index="/freeTour">自由行</el-menu-item>
                 <el-menu-item index="/mailSteamerTour">邮轮游</el-menu-item>
@@ -47,7 +47,7 @@ export default {
     methods: {
         handleSelect(key, keyPath) {
             this.$router.push(key);
-            console.log(key, keyPath);
+            // console.log(key, keyPath);
         }
     }
 }

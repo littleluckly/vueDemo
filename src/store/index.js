@@ -21,7 +21,6 @@ export default new Vuex.Store({
     },
     actions: {
         toggleLoginStatus (ctx, payload) {
-            console.log(payload,'payload111')
             ctx.commit({
                 type: 'toggleLoginStatus',
                 flag: payload.flag

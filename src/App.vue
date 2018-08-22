@@ -14,7 +14,7 @@
 
 <script>
 	import jsCookie from 'js-cookie'
-	import Header from './views/Header.vue'
+	import Header from './components/Header.vue'
 	import {
 		createNamespacedHelpers
 	} from 'vuex'

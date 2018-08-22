@@ -17,7 +17,7 @@
 
 <script>
 	import jsCookie from 'js-cookie'
-	// import THREE from '@/assets/jquery.particleground.min'
+	import axios from 'axios'
 	// import {
 	// 	createNamespacedHelpers
 	// } from 'vuex'
@@ -61,17 +61,26 @@
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
-						jsCookie.set('auth', 'true222')
-						this.$router.push('/')
-						const {
-							dispatch,
-							commit
-						} = this.$store;
-						// dispatch({
-						// 	type: 'toggleLoginStatus',
-						// 	flag: true
-						// })
-						dispatch('toggleLoginStatus',{flag:true}, {root:false})
+						axios({
+							method: 'post',
+							url: '/login/signIn',
+							data: {
+								...this.ruleForm2
+							}
+						}).then((res) => {
+							console.log(res,'res')
+							jsCookie.set('auth', 'true222')
+							this.$router.push('/')
+							const {
+								dispatch,
+								commit
+							} = this.$store;
+							dispatch('toggleLoginStatus', {
+								flag: true
+							})
+						},(res)=>{
+							alert('error')
+						});
 					} else {
 						console.log('error submit!!');
 						return false;
@@ -82,9 +91,10 @@
 				this.$refs[formName].resetFields();
 			},
 			// ...mapActions(['toggleLoginStatus'])
-		}
+		},
 	}
 </script>
 
 <style lang="less" scoped>
+
 </style>

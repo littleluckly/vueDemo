@@ -69,7 +69,14 @@ module.exports = {
         https: false,
         hotOnly: false,
         // 查阅 https://github.com/vuejs/vue-docs-zh-cn/blob/master/vue-cli/cli-service.md#配置代理
-        proxy: null, // string | Object
+        proxy: {
+            '/login/*': {
+                target: 'http://127.0.0.1:2233',
+                ws: true,
+                changeOrigin: true
+            }
+        },
+        // string | Object
         before: app => {}
     },
 
