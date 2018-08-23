@@ -5,7 +5,10 @@ export default {
     },
     getters: {
         loginStatus: (state, getters, rootState) => {
-            return rootState.loginStatus
+            return rootState.loginStatus;
+        },
+        username: (state, getters, rootState) => {
+            return rootState.username;
         }
     }
-}
+};

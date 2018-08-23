@@ -12,18 +12,30 @@ export default new Vuex.Store({
     namespaced: true,
     state: {
         rootCount: 0,
-        loginStatus: false
+        loginStatus: false,
+        username: ''
     },
     mutations: {
         toggleLoginStatus (state, payload) {
             state.loginStatus = payload.flag
+            state.username = payload.username
+        },
+        toggleUsername (state, payload) {
+            state.username = payload.username
         }
     },
     actions: {
         toggleLoginStatus (ctx, payload) {
             ctx.commit({
                 type: 'toggleLoginStatus',
-                flag: payload.flag
+                flag: payload.flag,
+                username: payload.username
+            })
+        },
+        toggleUsername (ctx, payload) {
+            ctx.commit({
+                type: 'toggleUsername',
+                username: payload.username
             })
         }
     },

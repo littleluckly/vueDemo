@@ -1,17 +1,42 @@
 <template>
-	<div class="login-container" style="margin: 0px;overflow: hidden;height:100%;">
-		<el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm">
-			<el-form-item label="用户名" prop="username">
-				<el-input v-model="ruleForm2.username"></el-input>
-			</el-form-item>
-			<el-form-item label="密码" prop="pass">
-				<el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
-			</el-form-item>
-			<el-form-item>
-				<el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
-				<el-button @click="resetForm('ruleForm2')">重置</el-button>
-			</el-form-item>
-		</el-form>
+	<div class="loginContainer" style="margin: 0px;overflow: hidden;height:100%;">
+		<div class="formWrap">
+			<div class="formBody">
+				<template v-if="isSignIn">
+						<el-form :model="loginForm" status-icon :rules="rules2" ref="loginForm" label-width="">
+							<el-form-item prop="username">
+								<el-input v-model="loginForm.username" placeholder="请输入用户名"></el-input>
+							</el-form-item>
+							<el-form-item  prop="pass">
+								<el-input type="password" v-model="loginForm.pass" auto-complete="off" placeholder="请输入密码"></el-input>
+							</el-form-item>
+							<el-form-item>
+								<el-button type="primary" @click="submitForm('loginForm')" class="loginBtn">登陆</el-button>
+							</el-form-item>
+						</el-form>
+				</template>
+				<template v-else>
+					<el-form :model="signUpForm" status-icon :rules="rules2" ref="signUpForm" label-width="">
+						<el-form-item prop="username">
+							<el-input v-model="signUpForm.username" placeholder="请输入用户名"></el-input>
+						</el-form-item>
+						<el-form-item prop="pass">
+							<el-input type="password" v-model="signUpForm.pass" auto-complete="off" placeholder="请输入密码"></el-input>
+						</el-form-item>
+						<el-form-item prop="passAgain">
+							<el-input type="password" v-model="signUpForm.passAgain" auto-complete="off" placeholder="请再次输入密码"></el-input>
+						</el-form-item>
+						<el-form-item>
+							<el-button type="primary" @click="submitForm('signUpForm')" class="loginBtn">注册</el-button>
+						</el-form-item>
+					</el-form>
+				</template>
+			</div>
+			<div class="loginBottom">
+				<span v-if="isSignIn">没有帐号？<span class="signUpBtn" @click="toggleSignType(false)">注册</span></span>
+				<span v-else>已有帐号？<span class="signUpBtn" @click="toggleSignType(true)">登陆</span></span>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -28,26 +53,46 @@
 		data() {
 			var checkAge = (rule, value, callback) => {
 				if (!value) {
-					return callback(new Error('用户名不能为空'));
+					callback(new Error('用户名不能为空'));
 				} else {
 					callback();
 				}
 			};
 			var validatePass = (rule, value, callback) => {
 				if (!value) {
-					return callback(new Error('请输入密码'));
+					callback(new Error('请输入密码'));
+				} else {
+					callback();
+				}
+			};
+			var validatePassAgain = (rule, value, callback) => {
+				debugger
+				if (!value) {
+					callback(new Error('请再次输入密码'));
+				} else if (value !== this.signUpForm.passAgain) {
+					callback(new Error('两次输入密码不一致!'));
 				} else {
 					callback();
 				}
 			};
 			return {
-				ruleForm2: {
+				isSignIn: true,
+				loginForm: {
 					pass: '',
+					username: ''
+				},
+				signUpForm: {
+					pass: '',
+					passAgain: '',
 					username: ''
 				},
 				rules2: {
 					pass: [{
 						validator: validatePass,
+						trigger: 'blur'
+					}],
+					passAgain: [{
+						validator: validatePassAgain,
 						trigger: 'blur'
 					}],
 					username: [{
@@ -65,20 +110,27 @@
 							method: 'post',
 							url: '/login/signIn',
 							data: {
-								...this.ruleForm2
+								...this.loginForm
 							}
 						}).then((res) => {
-							console.log(res,'res')
-							jsCookie.set('auth', 'true222')
-							this.$router.push('/')
-							const {
-								dispatch,
-								commit
-							} = this.$store;
-							dispatch('toggleLoginStatus', {
-								flag: true
-							})
-						},(res)=>{
+							if (res.data.status === "ok") {
+								jsCookie.set('auth', 'true222')
+								jsCookie.set('username', this.loginForm.username)
+								this.$router.push('/')
+								const {
+									dispatch,
+									commit
+								} = this.$store;
+								dispatch('toggleLoginStatus', {
+									flag: true
+								})
+								dispatch('toggleUsername', {
+									username: this.loginForm.username
+								})
+							} else {
+								this.$message.error(res.data.msg);
+							}
+						}, (res) => {
 							alert('error')
 						});
 					} else {
@@ -90,11 +142,52 @@
 			resetForm(formName) {
 				this.$refs[formName].resetFields();
 			},
+			toggleSignType(flag) {
+				this.isSignIn = flag;
+				if (flag) {
+					this.resetForm('signUpForm')
+				} else {
+					this.resetForm('loginForm')
+				}
+			}
 			// ...mapActions(['toggleLoginStatus'])
 		},
 	}
 </script>
 
 <style lang="less" scoped>
-
+	.loginContainer {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		background: url('../assets/img/sign_bg.png') 100% 100% no-repeat;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		.formWrap {
+			width: 400px; // height: 600px;
+			background: #fff;
+			box-shadow: 0 1px 3px rgba(26, 26, 26, .1);
+			.formBody {
+				padding: 40px 20px 20px 20px;
+				.loginBtn {
+					width: 100%;
+				}
+			}
+			.loginBottom {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 100%;
+				background-color: #f6f6f6;
+				height: 58px;
+				border-top: 1px solid #ebebeb;
+			}
+			.signUpBtn {
+				color: #175199;
+				cursor: pointer;
+			}
+		}
+	}
 </style>

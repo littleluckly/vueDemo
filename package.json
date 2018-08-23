@@ -31,33 +31,6 @@
     "less-loader": "^4.1.0",
     "vue-template-compiler": "^2.5.17"
   },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "@vue/standard"
-    ],
-    "rules": {
-      "no-tabs": "off",
-      "no-mixed-spaces-and-tabs": [
-        0
-      ],
-      "vue/script-indent": [
-        "error",
-        4,
-        {
-          "baseIndent": 1
-        }
-      ],
-      "indent": "off"
-    },
-    "parserOptions": {
-      "parser": "babel-eslint"
-    }
-  },
   "postcss": {
     "plugins": {
       "autoprefixer": {}

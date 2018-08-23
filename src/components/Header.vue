@@ -7,7 +7,7 @@
                 </el-menu-item>
                 <el-submenu index="2">
                     <template slot="title">跟团游
-                    </template>
+</template>
                         <el-menu-item index="/overseaPackageTour">出境跟团</el-menu-item>
                         <el-menu-item index="/interPackageTour">国内跟团</el-menu-item>
                         <el-menu-item index="/aroundPackageTour">周边跟团</el-menu-item>
@@ -18,52 +18,80 @@
             </el-menu>
         </div>
         <div class="userOper">
-            <span class="userOperBtn">注册/登陆{{loginStatus}}</span>
+            <el-dropdown v-if="">
+                <span class="el-dropdown-link">
+                    {{username}}<i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="logout">退出</el-dropdown-item>
+                    <el-dropdown-item>设置</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+            <!-- <span class="userOperBtn"><i class="icon iconfont icon-person1"></i>{{username}}</span> -->
         </div>
     </div>
 </template>
 
 <script>
-import {
-    createNamespacedHelpers
-} from 'vuex'
-
-const {
-    mapGetters,
-    mapActions,
-    mapState
-} = createNamespacedHelpers('headerStore')
-
-export default {
-    data() {
-        return {
-            activeIndex: '1',
-            activeIndex2: '1'
-        };
-    },
-    computed: {
-        ...mapGetters(['loginStatus'])
-    },
-    methods: {
-        handleSelect(key, keyPath) {
-            this.$router.push(key);
-            // console.log(key, keyPath);
-        }
+    import jsCookie from 'js-cookie'
+    import {
+        createNamespacedHelpers
+    } from 'vuex'
+    const {
+        mapGetters,
+        mapActions,
+        mapState
+    } = createNamespacedHelpers('headerStore')
+    export default {
+        data() {
+            return {
+                activeIndex: '1',
+                activeIndex2: '1'
+            };
+        },
+        beforeCreate() {
+            const {
+                dispatch
+            } = this.$store;
+            dispatch('toggleUsername', {
+                username: jsCookie.get('username')
+            })
+        },
+        computed: {
+            ...mapGetters(['loginStatus', 'username'])
+        },
+        methods: {
+            handleSelect(key, keyPath) {
+                this.$router.push(key);
+            },
+            logout() {
+                const {
+                    dispatch,
+                    commit,
+                } = this.$store;
+                dispatch('toggleLoginStatus',{flag:false});
+                jsCookie.remove('auth')
+                jsCookie.remove('username')
+                this.$router.push('/login')
+            }
+        } 
     }
-}
 </script>
 
 <style scoped lang="less">
-    .headerWrap{
+    .headerWrap {
         display: flex;
-        .headerMenuWrap{
-            flex:1;
+        .headerMenuWrap {
+            flex: 1;
         }
-        .userOper{
+        .userOper {
             width: 100px;
             float: right;
-            .userOperBtn{
+            .userOperBtn {
                 cursor: pointer;
+                >i {
+                    margin-right: 6px;
+                }
             }
         }
     }

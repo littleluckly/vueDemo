@@ -45,7 +45,8 @@
 	}
 </script>
 
-<style scoped>
+<style >
+	@import "./assets/icon/iconfont.css";
 	#app {
 		width: 1300px;
 		margin: 0 auto;
