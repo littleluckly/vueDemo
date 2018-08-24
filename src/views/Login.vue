@@ -2,35 +2,31 @@
 	<div class="loginContainer" style="margin: 0px;overflow: hidden;height:100%;">
 		<div class="formWrap">
 			<div class="formBody">
-				<template v-if="isSignIn">
-						<el-form :model="loginForm" status-icon :rules="rules2" ref="loginForm" label-width="">
-							<el-form-item prop="username">
-								<el-input v-model="loginForm.username" placeholder="请输入用户名"></el-input>
-							</el-form-item>
-							<el-form-item  prop="pass">
-								<el-input type="password" v-model="loginForm.pass" auto-complete="off" placeholder="请输入密码"></el-input>
-							</el-form-item>
-							<el-form-item>
-								<el-button type="primary" @click="submitForm('loginForm')" class="loginBtn">登陆</el-button>
-							</el-form-item>
-						</el-form>
-				</template>
-				<template v-else>
-					<el-form :model="signUpForm" status-icon :rules="rules2" ref="signUpForm" label-width="">
-						<el-form-item prop="username">
-							<el-input v-model="signUpForm.username" placeholder="请输入用户名"></el-input>
-						</el-form-item>
-						<el-form-item prop="pass">
-							<el-input type="password" v-model="signUpForm.pass" auto-complete="off" placeholder="请输入密码"></el-input>
-						</el-form-item>
-						<el-form-item prop="passAgain">
-							<el-input type="password" v-model="signUpForm.passAgain" auto-complete="off" placeholder="请再次输入密码"></el-input>
-						</el-form-item>
-						<el-form-item>
-							<el-button type="primary" @click="submitForm('signUpForm')" class="loginBtn">注册</el-button>
-						</el-form-item>
-					</el-form>
-				</template>
+				<el-form v-show="isSignIn" :model="loginForm" :rules="rules1" ref="loginForm" label-width="0">
+					<el-form-item prop="username">
+						<el-input v-model="loginForm.username" placeholder="请输入用户名"></el-input>
+					</el-form-item>
+					<el-form-item  prop="pass">
+						<el-input type="password" v-model="loginForm.pass" auto-complete="off" placeholder="请输入密码"></el-input>
+					</el-form-item>
+					<el-form-item>
+						<el-button type="primary" @click="submitForm('loginForm')" class="loginBtn">登陆</el-button>
+					</el-form-item>
+				</el-form>
+				<el-form v-show="!isSignIn" :model="signUpForm" :rules="rules2" ref="signUpForm" label-width="0">
+					<el-form-item prop="username">
+						<el-input v-model="signUpForm.username" placeholder="请输入用户名"></el-input>
+					</el-form-item>
+					<el-form-item prop="pass">
+						<el-input type="password" v-model="signUpForm.pass" auto-complete="off" placeholder="请输入密码"></el-input>
+					</el-form-item>
+					<el-form-item prop="passAgain">
+						<el-input type="password" v-model="signUpForm.passAgain" auto-complete="off" placeholder="请再次输入密码"></el-input>
+					</el-form-item>
+					<el-form-item>
+						<el-button type="primary" @click="submitForm('signUpForm')" class="loginBtn">注册</el-button>
+					</el-form-item>
+				</el-form>
 			</div>
 			<div class="loginBottom">
 				<span v-if="isSignIn">没有帐号？<span class="signUpBtn" @click="toggleSignType(false)">注册</span></span>
@@ -66,7 +62,6 @@
 				}
 			};
 			var validatePassAgain = (rule, value, callback) => {
-				debugger
 				if (!value) {
 					callback(new Error('请再次输入密码'));
 				} else if (value !== this.signUpForm.passAgain) {
@@ -85,6 +80,16 @@
 					pass: '',
 					passAgain: '',
 					username: ''
+				},
+				rules1: {
+					pass: [{
+						validator: validatePass,
+						trigger: 'blur'
+					}],
+					username: [{
+						validator: checkAge,
+						trigger: 'blur'
+					}]
 				},
 				rules2: {
 					pass: [{
@@ -140,7 +145,7 @@
 				});
 			},
 			resetForm(formName) {
-				this.$refs[formName].resetFields();
+				this.$refs[formName]&&this.$refs[formName].resetFields();
 			},
 			toggleSignType(flag) {
 				this.isSignIn = flag;
