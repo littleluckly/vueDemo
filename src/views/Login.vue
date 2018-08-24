@@ -1,8 +1,10 @@
 <template>
 	<div class="loginContainer" style="margin: 0px;overflow: hidden;height:100%;">
 		<div class="formWrap">
+			<h1 class="loginTitle">嘤嘤嘤</h1>
+			<h3 class="subTitle">注册嘤嘤嘤，发现更多逗比</h3>
 			<div class="formBody">
-				<el-form v-show="isSignIn" :model="loginForm" :rules="rules1" ref="loginForm" label-width="0">
+				<el-form v-show="isSignIn" :model="loginForm" :rules="rules2" ref="loginForm" label-width="0">
 					<el-form-item prop="username">
 						<el-input v-model="loginForm.username" placeholder="请输入用户名"></el-input>
 					</el-form-item>
@@ -10,7 +12,7 @@
 						<el-input type="password" v-model="loginForm.pass" auto-complete="off" placeholder="请输入密码"></el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="submitForm('loginForm')" class="loginBtn">登陆</el-button>
+						<el-button type="primary" @click="handleSignIn('loginForm')" class="loginBtn" :icon="loginLoading">登陆</el-button>
 					</el-form-item>
 				</el-form>
 				<el-form v-show="!isSignIn" :model="signUpForm" :rules="rules2" ref="signUpForm" label-width="0">
@@ -24,7 +26,7 @@
 						<el-input type="password" v-model="signUpForm.passAgain" auto-complete="off" placeholder="请再次输入密码"></el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="submitForm('signUpForm')" class="loginBtn">注册</el-button>
+						<el-button type="primary" @click="handleSignUp('signUpForm')" class="loginBtn">注册</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -62,9 +64,10 @@
 				}
 			};
 			var validatePassAgain = (rule, value, callback) => {
+				this.signUpForm.passAgain
 				if (!value) {
 					callback(new Error('请再次输入密码'));
-				} else if (value !== this.signUpForm.passAgain) {
+				} else if (value !== this.signUpForm.pass) {
 					callback(new Error('两次输入密码不一致!'));
 				} else {
 					callback();
@@ -72,6 +75,7 @@
 			};
 			return {
 				isSignIn: true,
+				loginLoading: '',
 				loginForm: {
 					pass: '',
 					username: ''
@@ -80,16 +84,6 @@
 					pass: '',
 					passAgain: '',
 					username: ''
-				},
-				rules1: {
-					pass: [{
-						validator: validatePass,
-						trigger: 'blur'
-					}],
-					username: [{
-						validator: checkAge,
-						trigger: 'blur'
-					}]
 				},
 				rules2: {
 					pass: [{
@@ -108,7 +102,7 @@
 			};
 		},
 		methods: {
-			submitForm(formName) {
+			handleSignIn(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
 						axios({
@@ -144,6 +138,48 @@
 					}
 				});
 			},
+			handleSignUp(formName) {
+				this.$refs[formName].validate((valid) => {
+					if (valid) {
+						this.loginLoading='el-icon-loading';
+						console.log(1,this)
+						axios({
+							method: 'post',
+							url: '/login/signUp',
+							data: {
+								...this.signUpForm
+							}
+						}).then((res) => {
+							this.loginLoading='';
+							console.log(2,this)
+							if (res.data.status === "ok") {
+								jsCookie.set('auth', 'true222')
+								jsCookie.set('username', this.signUpForm.username)
+								this.$router.push('/')
+								const {
+									dispatch,
+									commit
+								} = this.$store;
+								dispatch('toggleLoginStatus', {
+									flag: true
+								})
+								dispatch('toggleUsername', {
+									username: this.signUpForm.username
+								})
+								this.$message.success('注册成功');
+							} else {
+								this.$message.error(res.data.msg);
+							}
+						}, (res) => {
+							alert('error')
+							this.loginLoading='';
+						});
+					} else {
+						console.log('error submit!!');
+						return false;
+					}
+				});
+			},
 			resetForm(formName) {
 				this.$refs[formName]&&this.$refs[formName].resetFields();
 			},
@@ -161,6 +197,15 @@
 </script>
 
 <style lang="less" scoped>
+	.loginTitle{
+		font-size: 36px;
+		text-align: center;
+		color: #0084ff;
+	}
+	.subTitle{
+		text-align: center;
+		color: #0084ff;
+	}
 	.loginContainer {
 		position: fixed;
 		top: 0;
