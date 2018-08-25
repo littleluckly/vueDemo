@@ -12,7 +12,7 @@
 						<el-input type="password" v-model="loginForm.pass" auto-complete="off" placeholder="请输入密码"></el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="handleSignIn('loginForm')" class="loginBtn" :icon="loginLoading">登陆</el-button>
+						<el-button type="primary" @click="handleSignIn('loginForm')" class="loginBtn" :icon="loginLoading" :disabled="loginDisabled">登陆</el-button>
 					</el-form-item>
 				</el-form>
 				<el-form v-show="!isSignIn" :model="signUpForm" :rules="rules2" ref="signUpForm" label-width="0">
@@ -26,7 +26,7 @@
 						<el-input type="password" v-model="signUpForm.passAgain" auto-complete="off" placeholder="请再次输入密码"></el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="handleSignUp('signUpForm')" class="loginBtn">注册</el-button>
+						<el-button type="primary" @click="handleSignUp('signUpForm')" class="loginBtn" :icon="loginLoading" :disabled="loginDisabled">注册</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -101,37 +101,46 @@
 				}
 			};
 		},
+		computed: {
+			loginDisabled(){
+				return this.loginLoading==="el-icon-loading";
+			}
+		},
 		methods: {
 			handleSignIn(formName) {
 				this.$refs[formName].validate((valid) => {
+					this.loginLoading='el-icon-loading';
 					if (valid) {
-						axios({
-							method: 'post',
-							url: '/login/signIn',
-							data: {
-								...this.loginForm
-							}
-						}).then((res) => {
-							if (res.data.status === "ok") {
-								jsCookie.set('auth', 'true222')
-								jsCookie.set('username', this.loginForm.username)
-								this.$router.push('/')
-								const {
-									dispatch,
-									commit
-								} = this.$store;
-								dispatch('toggleLoginStatus', {
-									flag: true
-								})
-								dispatch('toggleUsername', {
-									username: this.loginForm.username
-								})
-							} else {
-								this.$message.error(res.data.msg);
-							}
-						}, (res) => {
-							alert('error')
-						});
+						setTimeout(() => {
+							axios({
+								method: 'post',
+								url: '/login/signIn',
+								data: {
+									...this.loginForm
+								}
+							}).then((res) => {
+								this.loginLoading='';
+								if (res.data.status === "ok") {
+									jsCookie.set('auth', 'true222')
+									jsCookie.set('username', this.loginForm.username)
+									this.$router.push('/')
+									const {
+										dispatch,
+										commit
+									} = this.$store;
+									dispatch('toggleLoginStatus', {
+										flag: true
+									})
+									dispatch('toggleUsername', {
+										username: this.loginForm.username
+									})
+								} else {
+									this.$message.error(res.data.msg);
+								}
+							}, (res) => {
+								this.loginLoading='';
+							});
+						}, 1800);
 					} else {
 						console.log('error submit!!');
 						return false;
@@ -142,38 +151,39 @@
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
 						this.loginLoading='el-icon-loading';
-						console.log(1,this)
-						axios({
-							method: 'post',
-							url: '/login/signUp',
-							data: {
-								...this.signUpForm
-							}
-						}).then((res) => {
-							this.loginLoading='';
-							console.log(2,this)
-							if (res.data.status === "ok") {
-								jsCookie.set('auth', 'true222')
-								jsCookie.set('username', this.signUpForm.username)
-								this.$router.push('/')
-								const {
-									dispatch,
-									commit
-								} = this.$store;
-								dispatch('toggleLoginStatus', {
-									flag: true
-								})
-								dispatch('toggleUsername', {
-									username: this.signUpForm.username
-								})
-								this.$message.success('注册成功');
-							} else {
-								this.$message.error(res.data.msg);
-							}
-						}, (res) => {
-							alert('error')
-							this.loginLoading='';
-						});
+						setTimeout(() => {
+							axios({
+								method: 'post',
+								url: '/login/signUp',
+								data: {
+									...this.signUpForm
+								}
+							}).then((res) => {
+								this.loginLoading='';
+								console.log(2,this)
+								if (res.data.status === "ok") {
+									jsCookie.set('auth', 'true222')
+									jsCookie.set('username', this.signUpForm.username)
+									this.$router.push('/')
+									const {
+										dispatch,
+										commit
+									} = this.$store;
+									dispatch('toggleLoginStatus', {
+										flag: true
+									})
+									dispatch('toggleUsername', {
+										username: this.signUpForm.username
+									})
+									this.$message.success('注册成功');
+								} else {
+									this.$message.error(res.data.msg);
+								}
+							}, (res) => {
+								alert('error')
+								this.loginLoading='';
+							});
+						}, 1800);
 					} else {
 						console.log('error submit!!');
 						return false;
