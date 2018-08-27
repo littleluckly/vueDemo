@@ -2,7 +2,7 @@ export default {
     namespaced: true,
     getters: {
         loginStatus: (state, getters, rootState) => {
-            return rootState.loginStatus
+            return rootState.loginStatus;
         }
     },
     actions: {
@@ -14,4 +14,4 @@ export default {
         //     })
         // }
     }
-}
+};

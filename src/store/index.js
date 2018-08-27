@@ -1,12 +1,13 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-import helloWorldStore from './modules/helloWorldStore'
-import aboutStore from './modules/aboutStore'
-import headerStore from './modules/headerStore'
-import loginStore from './modules/loginStore'
+import helloWorldStore from './modules/helloWorldStore';
+import aboutStore from './modules/aboutStore';
+import headerStore from './modules/headerStore';
+import loginStore from './modules/loginStore';
+import homepageStore from './modules/homepageStore';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
     namespaced: true,
@@ -17,11 +18,11 @@ export default new Vuex.Store({
     },
     mutations: {
         toggleLoginStatus (state, payload) {
-            state.loginStatus = payload.flag
-            state.username = payload.username
+            state.loginStatus = payload.flag;
+            state.username = payload.username;
         },
         toggleUsername (state, payload) {
-            state.username = payload.username
+            state.username = payload.username;
         }
     },
     actions: {
@@ -30,19 +31,20 @@ export default new Vuex.Store({
                 type: 'toggleLoginStatus',
                 flag: payload.flag,
                 username: payload.username
-            })
+            });
         },
         toggleUsername (ctx, payload) {
             ctx.commit({
                 type: 'toggleUsername',
                 username: payload.username
-            })
+            });
         }
     },
     modules: {
         helloWorldStore,
         aboutStore,
         headerStore,
-        loginStore
+        loginStore,
+        homepageStore
     }
-})
+});

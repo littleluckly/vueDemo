@@ -71,7 +71,12 @@ module.exports = {
         // 查阅 https://github.com/vuejs/vue-docs-zh-cn/blob/master/vue-cli/cli-service.md#配置代理
         proxy: {
             '/login/*': {
-                target: 'http://127.0.0.1:2233',
+                target: 'http://127.0.0.1:5577',
+                ws: true,
+                changeOrigin: true
+            },
+            '/homepage/*': {
+                target: 'http://127.0.0.1:5577',
                 ws: true,
                 changeOrigin: true
             }
