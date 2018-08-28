@@ -50,13 +50,14 @@
 	#app {
 		width: 1300px;
 		margin: 0 auto;
+		background-color: #f2f2f2;
 	}
 	.el-container{
 		flex-direction: column;
 	}
 	.el-header,
 	.el-footer {
-		/* background-color: #B3C0D1; */
+		background-color: #fff;
 		color: #333;
 		text-align: center;
 		line-height: 60px;
@@ -68,7 +69,8 @@
 		line-height: 200px;
 	}
 	.el-main {
-		background-color: #E9EEF3;
+		margin-top: 10px;
+		background-color: #fff;
 		color: #333;
 		text-align: center;
 		min-height: calc(100vh - 50px);

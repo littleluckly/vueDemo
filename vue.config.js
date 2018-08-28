@@ -79,6 +79,11 @@ module.exports = {
                 target: 'http://127.0.0.1:5577',
                 ws: true,
                 changeOrigin: true
+            },
+            '/militaryNews/*': {
+                target: 'http://127.0.0.1:5577',
+                ws: true,
+                changeOrigin: true
             }
         },
         // string | Object

@@ -7,7 +7,7 @@ import OverseaPackageTour from './views/OverseaPackageTour.vue';
 import InterPackageTour from './views/InterPackageTour.vue';
 import AroundPackageTour from './views/AroundPackageTour.vue';
 import MailSteamerTour from './views/MailSteamerTour.vue';
-import FreeTour from './views/FreeTour.vue';
+import MilitaryNews from './views/MilitaryNews.vue';
 import NotFound from './views/NotFound.vue';
 
 import jsCookie from 'js-cookie';
@@ -58,9 +58,9 @@ const router = new Router({
             component: MailSteamerTour
         },
         {
-            path: '/freeTour',
-            name: 'FreeTour',
-            component: FreeTour
+            path: '/military',
+            name: 'MilitaryNews',
+            component: MilitaryNews
         },
         {
             path: '*',

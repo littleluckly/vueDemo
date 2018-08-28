@@ -6,6 +6,7 @@ import aboutStore from './modules/aboutStore';
 import headerStore from './modules/headerStore';
 import loginStore from './modules/loginStore';
 import homepageStore from './modules/homepageStore';
+import militaryStore from './modules/militaryStore'
 
 Vue.use(Vuex);
 
@@ -45,6 +46,7 @@ export default new Vuex.Store({
         aboutStore,
         headerStore,
         loginStore,
-        homepageStore
+        homepageStore,
+        militaryStore
     }
 });

@@ -5,20 +5,19 @@
                 <el-menu-item index="/">
                     首页
                 </el-menu-item>
-                <el-submenu index="2">
-                    <template slot="title">跟团游
-</template>
-                        <el-menu-item index="/overseaPackageTour">出境跟团</el-menu-item>
-                        <el-menu-item index="/interPackageTour">国内跟团</el-menu-item>
-                        <el-menu-item index="/aroundPackageTour">周边跟团</el-menu-item>
-                </el-submenu>
-                <el-menu-item index="/freeTour">自由行</el-menu-item>
+                <el-menu-item index="/military">军事</el-menu-item>
                 <el-menu-item index="/mailSteamerTour">邮轮游</el-menu-item>
                 <el-menu-item index="/about">关于</el-menu-item>
+                <!-- <el-submenu index="2">
+                    <template slot="title">跟团游</template>
+                    <el-menu-item index="/overseaPackageTour">出境跟团</el-menu-item>
+                    <el-menu-item index="/interPackageTour">国内跟团</el-menu-item>
+                    <el-menu-item index="/aroundPackageTour">周边跟团</el-menu-item>
+                </el-submenu> -->
             </el-menu>
         </div>
         <div class="userOper">
-            <el-dropdown v-if="">
+            <el-dropdown v-if="loginStatus">
                 <span class="el-dropdown-link">
                     {{username}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
