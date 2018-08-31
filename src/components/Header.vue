@@ -19,7 +19,8 @@
         <div class="userOper">
             <el-dropdown v-if="loginStatus">
                 <span class="el-dropdown-link">
-                    {{username}}<i class="el-icon-arrow-down el-icon--right"></i>
+                    <i class="icon iconfont icon-person"></i>{{username}}
+
                 </span>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item @click.native="logout">退出</el-dropdown-item>
@@ -73,7 +74,7 @@
                 jsCookie.remove('username')
                 this.$router.push('/login')
             }
-        } 
+        }
     }
 </script>
 

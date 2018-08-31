@@ -47,6 +47,9 @@
 
 <style >
 	@import "./assets/icon/iconfont.css";
+	body{
+		background: #f2f2f2;
+	}
 	#app {
 		width: 1300px;
 		margin: 0 auto;
@@ -70,7 +73,8 @@
 	}
 	.el-main {
 		margin-top: 10px;
-		background-color: #fff;
+		padding-left: 0;
+		/* background-color: #fff; */
 		color: #333;
 		text-align: center;
 		min-height: calc(100vh - 50px);

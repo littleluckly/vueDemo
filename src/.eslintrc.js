@@ -30,15 +30,10 @@ module.exports={
             "always"
         ],
         "linebreak-style": "off",
-        "no-mixed-spaces-and-tabs": "warn",
+        "no-mixed-spaces-and-tabs": "off",
         "no-unused-vars": "warn",
         "no-useless-escape": "warn",
         "no-case-declarations": "warn",
-        /*
-		"react/prop-types": "warn",
-		"react/no-string-refs": "warn",
-        "react/no-unescaped-entities": "warn"*/
-        "react/display-name": [0]
     },
     "parserOptions": {
       "parser": "babel-eslint"

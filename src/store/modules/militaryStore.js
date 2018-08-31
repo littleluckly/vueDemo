@@ -11,13 +11,13 @@ export default {
         }
     },
     actions: {
-        fetchMilitaryNews ({commit}) { 
+        fetchMilitaryNews ({commit}) {
             axios({
                 method: 'get',
-                url: '/militaryNews' 
-            }).then((res)=>{
-                commit('fetchMilitaryNews', res.data); 
-            })
+                url: '/militaryNews'
+            }).then((res) => {
+                commit('fetchMilitaryNews', res.data);
+            });
         }
     }
 };
