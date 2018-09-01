@@ -121,7 +121,7 @@
 							}).then((res) => {
 								this.loginLoading='';
 								if (res.data.status === "ok") {
-									jsCookie.set('auth', 'true222')
+									jsCookie.set('auth', 'test')
 									jsCookie.set('username', this.loginForm.username)
 									this.$router.push('/')
 									const {
