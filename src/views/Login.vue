@@ -120,9 +120,7 @@
 								}
 							}).then((res) => {
 								this.loginLoading='';
-								if (res.data.status === "ok") {
-									jsCookie.set('auth', 'test')
-									jsCookie.set('username', this.loginForm.username)
+								if (res.data.status === "ok") { 
 									this.$router.push('/')
 									const {
 										dispatch,
@@ -200,8 +198,7 @@
 				} else {
 					this.resetForm('loginForm')
 				}
-			}
-			// ...mapActions(['toggleLoginStatus'])
+			} 
 		},
 	}
 </script>

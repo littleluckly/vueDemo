@@ -17,7 +17,7 @@
             </el-menu>
         </div>
         <div class="userOper">
-            <el-dropdown v-if="loginStatus">
+            <el-dropdown v-if="username">
                 <span class="el-dropdown-link">
                     <i class="icon iconfont icon-person"></i>{{username}}
 
@@ -34,6 +34,7 @@
 
 <script>
     import jsCookie from 'js-cookie'
+    import axios from 'axios'
     import {
         createNamespacedHelpers
     } from 'vuex'
@@ -58,7 +59,7 @@
             })
         },
         computed: {
-            ...mapGetters(['loginStatus', 'username'])
+            ...mapGetters(['username'])
         },
         methods: {
             handleSelect(key, keyPath) {
@@ -68,11 +69,18 @@
                 const {
                     dispatch,
                     commit,
-                } = this.$store;
-                dispatch('toggleLoginStatus',{flag:false});
-                jsCookie.remove('auth')
-                jsCookie.remove('username')
-                this.$router.push('/login')
+                } = this.$store; 
+                // jsCookie.remove('auth')
+                // jsCookie.remove('username')
+                // this.$router.push('/login')
+                axios({
+                    method: 'get',
+                    url: '/login/logout'
+                }).then(res=>{ 
+                    if(res.data==="ok"){
+                        this.$router.push('/login')
+                    }
+                })
             }
         }
     }
