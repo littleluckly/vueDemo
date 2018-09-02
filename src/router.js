@@ -31,12 +31,7 @@ const router = new Router({
             path: '/login',
             name: 'Login',
             component: Login
-        },
-        {
-            path: '/homepage',
-            name: 'Login',
-            component: Login
-        },
+        }, 
         {
             path: '/overseaPackageTour',
             name: 'OverseaPackageTour',

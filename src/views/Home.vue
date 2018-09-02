@@ -24,7 +24,7 @@
 						</transition>
 					</span>
 					<span class="dislikeIcon" :class="{active:item.hasLike=='dislike'}" @click="handleLike(item.hasLike,item.id,'dislike')">
-						<i class="icon iconfont icon-like"></i>{{item.dislikeCount}}
+						<i class="icon iconfont icon-dislike"></i>{{item.dislikeCount}}
 						<transition name="like">
 							<span class="like" style="display: inline-block;" v-if="item.dislikeVisible">+1</span>
 						</transition>

@@ -23,7 +23,7 @@ export default {
         paginationChange (state, payload) {
             state.pagination.pageNo = payload.pageNo;
         },
-        // 点赞或踩
+        // 点赞或点踩
         toggleLikeVisible (state, payload) {
             const { type, id, pageNo } = payload;
             state.homepageList.data = state.homepageList.data.map(comment => {
@@ -56,14 +56,15 @@ export default {
                 }
             }).then((res) => {
                 commit('fetchHomepageList', res.data);
-                let timer = setInterval(function () {
-                    let osTop = document.documentElement.scrollTop || document.body.scrollTop;
-                    let speed = Math.floor(-osTop / 6);
-                    document.documentElement.scrollTop = document.body.scrollTop = osTop + speed;
-                    if (osTop <= 0) {
-                        clearInterval(timer);
-                    }
-                }, 30);
+                // pageNo&&(document.documentElement.scrollTop = 0)
+                // let timer = setInterval(function () {
+                //     let osTop = document.documentElement.scrollTop || document.body.scrollTop;
+                //     let speed = Math.floor(-osTop / 6);
+                //     document.documentElement.scrollTop = document.body.scrollTop = osTop + speed;
+                //     if (osTop <= 0) {
+                //         clearInterval(timer);
+                //     }
+                // }, 30);
             });
         },
         changeHomepageList ({commit}, payload) {

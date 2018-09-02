@@ -70,17 +70,17 @@
                     dispatch,
                     commit,
                 } = this.$store; 
-                // jsCookie.remove('auth')
-                // jsCookie.remove('username')
-                // this.$router.push('/login')
-                axios({
-                    method: 'get',
-                    url: '/login/logout'
-                }).then(res=>{ 
-                    if(res.data==="ok"){
-                        this.$router.push('/login')
-                    }
-                })
+                jsCookie.remove('auth')
+                jsCookie.remove('username')
+                this.$router.push('/login')
+                // axios({
+                //     method: 'get',
+                //     url: '/login/logout'
+                // }).then(res=>{ 
+                //     if(res.data==="ok"){
+                //         this.$router.push('/login')
+                //     }
+                // })
             }
         }
     }
