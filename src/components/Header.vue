@@ -47,19 +47,15 @@
         data() {
             return {
                 activeIndex: '1',
-                activeIndex2: '1'
+                activeIndex2: '1',
+                username:''
             };
         },
-        beforeCreate() {
-            const {
-                dispatch
-            } = this.$store;
-            dispatch('toggleUsername', {
-                username: jsCookie.get('username')
-            })
-        },
+		created() { 
+            this.username=jsCookie.get('username') ;
+		},
         computed: {
-            ...mapGetters(['username'])
+            // ...mapGetters(['username'])
         },
         methods: {
             handleSelect(key, keyPath) {

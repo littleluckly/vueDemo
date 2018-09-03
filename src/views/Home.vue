@@ -17,12 +17,14 @@
 					<img v-else :src="item.laughImgSrc" />
 				</div>
 				<div class="blockBottom">
+					<!-- 点赞 -->
 					<span class="likeIcon" :class="{active:item.hasLike=='like'}" @click="handleLike(item.hasLike,item.id,'like')">
 						<i class="icon iconfont icon-like"></i>{{item.likeCount}}
 						<transition name="like">
 							<span class="like" style="display: inline-block;" v-if="item.likeVisible">+1</span>
 						</transition>
 					</span>
+					<!-- 点踩 -->
 					<span class="dislikeIcon" :class="{active:item.hasLike=='dislike'}" @click="handleLike(item.hasLike,item.id,'dislike')">
 						<i class="icon iconfont icon-dislike"></i>{{item.dislikeCount}}
 						<transition name="like">
@@ -32,11 +34,12 @@
 					<span class="commentIcon" @click="handleComment(item)"><i class="icon iconfont icon-pinglun"></i>{{item.commentCount}}</span>
 					<span class="shareIcon"><i class="icon iconfont icon-fenxiang"></i></span>
 				</div>
+				<!-- 评论 -->
 				<div class="commentsWrap" :class="{commentHidden:!item.commentVisible}" >
 					<div class="commentInputWrap">
-						<textarea class="commentInput" placeholder="说点什么吧，期待您的神回复！"></textarea>
+						<textarea v-model="commenContent" class="commentInput" placeholder="说点什么吧，期待您的神回复！"></textarea>
 						<div class="commentOper">
-							<span class="inputTip">还可以输入<span>300</span>字</span><el-button type="danger">评论</el-button>
+							<span class="inputTip">还可以输入<span>300</span>字</span><el-button @click="handleCommentLaugh(item.id)" type="danger">评论</el-button>
 						</div>
 					</div>
 					<div class="commentsHistory"></div>
@@ -62,9 +65,8 @@
 			HelloWorld
 		},
 		data() {
-			return {
-				visibleColl: {},
-				likeShow: false
+			return {  
+				commenContent:''
 			}
 		},
 		computed: mapState({
@@ -73,33 +75,32 @@
 			},
 			getVisible: function (){
 				return this.homepageList?this.homepageList.data:[]
-			},
-			comVisibleColl: function(){
-				return this.visibleColl
 			}
 		}),
 		created() {
 			this.fetchHomepageList()
 		},
 		methods: {
+			...mapActions('homepageStore', [
+				'fetchHomepageList',
+				'changeHomepageList',
+				'toggleLikeVisible',
+				'commentLaugh'
+			]),
 			handleChangePage(currPage) {
 				this.fetchHomepageList(currPage)
 			},
-            ...mapActions('homepageStore', [
-				'fetchHomepageList',
-				'changeHomepageList',
-				'toggleLikeVisible'
-			]),
 			handleComment(comment){
 				this.changeHomepageList(comment.id)
 			},
-			handleLike( hasLike, id, type ){
+			handleCommentLaugh: function(laughId){
+				console.log({laughId,content: this.commenContent})
+				this.commentLaugh({laughId,content: this.commenContent})
+			},
+			handleLike: function( hasLike, id, type ){
+				console.log(hasLike,'hasLike')
 				if(!hasLike){
-					this.toggleLikeVisible({id,type})
-					// this.likeShow = true;
-					// setTimeout(()=>{
-						// this.likeShow = false;
-					// },200)
+					this.toggleLikeVisible({id,type}) 
 				}
 			}
 		}

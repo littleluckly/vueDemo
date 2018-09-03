@@ -1,13 +1,13 @@
 <template>
 	<div id="app">
 		<el-container>
-			<el-header v-if="loginStatus">
+			<el-header v-if="username">
 				<Header/>
 			</el-header>
-			<el-main class="mainWrap">
+			<el-main class="mainWrap"> 
 				<router-view/>
 			</el-main>
-			<el-footer v-if="loginStatus">Footer</el-footer>
+			<el-footer v-if="username">Footer</el-footer>
 		</el-container>
 	</div>
 </template>
@@ -25,22 +25,20 @@
 		components: {
 			Header
 		},
-		beforeCreate() {
-			const {
-				dispatch
-			} = this.$store;
-			dispatch({
-				type: 'toggleLoginStatus',
-				flag: jsCookie.get('auth')
-			})
-		},
-		computed: {
-			loginStatus() {
-				return this.$store.getters['loginStore/loginStatus']
+		data(){
+			return {
+				username: ''
 			}
 		},
-		methods: {
-			...mapActions(['toggleLoginStatus'])
+		created() { 
+            this.username=jsCookie.get('username') ;
+		},
+		computed: { 
+			// username2: function(){
+			// 	return this.username+'test'
+			// }
+		},
+		methods: { 
 		}
 	}
 </script>

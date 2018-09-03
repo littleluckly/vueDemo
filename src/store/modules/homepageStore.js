@@ -21,7 +21,7 @@ export default {
             });
         },
         paginationChange (state, payload) {
-            state.pagination.pageNo = payload.pageNo;
+            state.pagination.pageNo = payload;
         },
         // 点赞或点踩
         toggleLikeVisible (state, payload) {
@@ -70,6 +70,7 @@ export default {
         changeHomepageList ({commit}, payload) {
             commit('changeHomepageList', payload);
         },
+        // 点赞点踩
         toggleLikeVisible ({commit, dispatch}, payload) {
             const { type, id, pageNo } = payload;
             axios({
@@ -79,13 +80,26 @@ export default {
                     laughId: id,
                     type
                 }
-            }).then((res) => {
-                console.log('res', res);
+            }).then((res) => { 
                 if (res && res.data.message === '') {
                     commit('toggleLikeVisible', payload);
                     dispatch('fetchHomepageList', pageNo);
                 }
             });
+        },
+        // 评论
+        commentLaugh ( {commit,dispatch,state}, payload) {
+            const { pageNo } = state.pagination
+            axios({
+                method:'post',
+                url: '/homepage/comment',
+                data: {
+                    ...payload
+                }
+            }).then((res)=>{
+                dispatch('fetchHomepageList', pageNo);
+            })
+            // console.log(result,'result')
         }
     }
 };

@@ -121,24 +121,14 @@
 							}).then((res) => {
 								this.loginLoading='';
 								if (res.data.status === "ok") { 
-									this.$router.push('/')
-									const {
-										dispatch,
-										commit
-									} = this.$store;
-									dispatch('toggleLoginStatus', {
-										flag: true
-									})
-									dispatch('toggleUsername', {
-										username: this.loginForm.username
-									})
+									this.$router.push('/') 
 								} else {
 									this.$message.error(res.data.msg);
 								}
 							}, (res) => {
 								this.loginLoading='';
 							});
-						}, 1800);
+						}, 1000);
 					} else {
 						console.log('error submit!!');
 						return false;
