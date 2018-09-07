@@ -20,11 +20,10 @@
             <el-dropdown v-if="username">
                 <span class="el-dropdown-link">
                     <i class="icon iconfont icon-person"></i>{{username}}
-
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="logout">退出</el-dropdown-item>
-                    <el-dropdown-item>设置</el-dropdown-item>
+                    <el-dropdown-item @click.native="logout"><i class="icon iconfont icon-hkquit"></i>退出</el-dropdown-item>
+                    <el-dropdown-item @click.native="linkTo"><i class="icon iconfont icon-set1"></i>设置</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
             <!-- <span class="userOperBtn"><i class="icon iconfont icon-person1"></i>{{username}}</span> -->
@@ -51,7 +50,7 @@
                 username:''
             };
         },
-		created() { 
+		created() {
             this.username=jsCookie.get('username') ;
 		},
         computed: {
@@ -61,18 +60,22 @@
             handleSelect(key, keyPath) {
                 this.$router.push(key);
             },
+            linkTo(){
+                this.$router.push('/perCenter');
+                // window.open('/perCenter')
+            },
             logout() {
                 const {
                     dispatch,
                     commit,
-                } = this.$store; 
+                } = this.$store;
                 jsCookie.remove('auth')
                 jsCookie.remove('username')
                 this.$router.push('/login')
                 // axios({
                 //     method: 'get',
                 //     url: '/login/logout'
-                // }).then(res=>{ 
+                // }).then(res=>{
                 //     if(res.data==="ok"){
                 //         this.$router.push('/login')
                 //     }
@@ -96,6 +99,9 @@
                 >i {
                     margin-right: 6px;
                 }
+            }
+            .el-dropdown{
+                height: 40px;
             }
         }
     }

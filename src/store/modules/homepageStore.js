@@ -4,9 +4,8 @@ export default {
     namespaced: true,
     state: {
         homepageList: {},
-        pagination: {
-
-        }
+        pagination: { },
+        historyCommentList: {}
     },
     mutations: {
         fetchHomepageList (state, payload) {
@@ -41,6 +40,16 @@ export default {
                     return comment;
                 });
             }, 300);
+        },
+        // 获取评论列表
+        fetchCommentList (state, payload) {
+            const { laughId, historyCommentList } = payload;
+            state.homepageList.data = state.homepageList.data.map(comment => {
+                if (comment.id === laughId) {
+                    comment.commentList = historyCommentList;
+                }
+                return comment;
+            });
         }
     },
     actions: {
@@ -80,26 +89,39 @@ export default {
                     laughId: id,
                     type
                 }
-            }).then((res) => { 
+            }).then((res) => {
                 if (res && res.data.message === '') {
                     commit('toggleLikeVisible', payload);
                     dispatch('fetchHomepageList', pageNo);
                 }
             });
         },
-        // 评论
-        commentLaugh ( {commit,dispatch,state}, payload) {
-            const { pageNo } = state.pagination
+        // 发表评论
+        publishComment ({commit, dispatch, state}, payload) {
+            const { pageNo } = state.pagination;
+            const { laughId } = payload;
             axios({
-                method:'post',
+                method: 'post',
                 url: '/homepage/comment',
                 data: {
                     ...payload
                 }
-            }).then((res)=>{
-                dispatch('fetchHomepageList', pageNo);
-            })
-            // console.log(result,'result')
+            }).then((res) => {
+                dispatch('fetchCommentList', {laughId});
+            });
+        },
+        // 获取评论列表
+        fetchCommentList ({commit, dispatch, state}, payload) {
+            const { laughId } = payload;
+            axios({
+                method: 'post',
+                url: '/homepage/getCommentList',
+                data: {
+                    laughId
+                }
+            }).then((res) => {
+                commit('fetchCommentList', {laughId, historyCommentList: res.data});
+            });
         }
     }
 };

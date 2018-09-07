@@ -9,6 +9,7 @@ import AroundPackageTour from './views/AroundPackageTour.vue';
 import MailSteamerTour from './views/MailSteamerTour.vue';
 import MilitaryNews from './views/MilitaryNews.vue';
 import NotFound from './views/NotFound.vue';
+import PersonalCenter from './views/PersonalCenter.vue';
 
 import jsCookie from 'js-cookie';
 Vue.use(Router);
@@ -23,39 +24,68 @@ const router = new Router({
             }
         },
         {
+            path: '/perCenter',
+            name: 'perCenter',
+            component: PersonalCenter,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
             path: '/about',
             name: 'about',
-            component: About
+            component: About,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/login',
             name: 'Login',
-            component: Login
-        }, 
+            component: Login,
+            meta: {
+                requiresAuth: true
+            }
+        },
         {
             path: '/overseaPackageTour',
             name: 'OverseaPackageTour',
-            component: OverseaPackageTour
+            component: OverseaPackageTour,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/interPackageTour',
             name: 'InterPackageTour',
-            component: InterPackageTour
+            component: InterPackageTour,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/aroundPackageTour',
             name: 'AroundPackageTour',
-            component: AroundPackageTour
+            component: AroundPackageTour,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/mailSteamerTour',
             name: 'MailSteamerTour',
-            component: MailSteamerTour
+            component: MailSteamerTour,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/military',
             name: 'MilitaryNews',
-            component: MilitaryNews
+            component: MilitaryNews,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '*',

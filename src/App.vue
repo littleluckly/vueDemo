@@ -1,10 +1,10 @@
 <template>
 	<div id="app">
 		<el-container>
-			<el-header v-if="username">
+			<el-header v-if="headerVisible">
 				<Header/>
 			</el-header>
-			<el-main class="mainWrap"> 
+			<el-main class="mainWrap">
 				<router-view/>
 			</el-main>
 			<el-footer v-if="username">Footer</el-footer>
@@ -15,12 +15,7 @@
 <script>
 	import jsCookie from 'js-cookie'
 	import Header from './components/Header.vue'
-	import {
-		createNamespacedHelpers
-	} from 'vuex'
-	const {
-		mapActions
-	} = createNamespacedHelpers('loginStore')
+	import { mapActions, mapState } from 'vuex'
 	export default {
 		components: {
 			Header
@@ -30,15 +25,27 @@
 				username: ''
 			}
 		},
-		created() { 
-            this.username=jsCookie.get('username') ;
+		created() {
+			this.username=jsCookie.get('username') ;
+			this.toggleHeaderVisible(true)
 		},
-		computed: { 
-			// username2: function(){
-			// 	return this.username+'test'
-			// }
+		computed: {
+			...mapState({
+				headerVisible: state => {
+					// console.log('state',state)
+					return state.headerVisible;
+				}
+			})
 		},
-		methods: { 
+		methods: {
+			...mapActions(['toggleHeaderVisible'])
+		},
+		watch: {
+			'$route' (to, from) { 
+				if(to.name !=='perCenter'){
+					this.toggleHeaderVisible(true)
+				}
+			}
 		}
 	}
 </script>

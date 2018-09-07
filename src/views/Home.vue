@@ -4,7 +4,7 @@
 		<!-- <div>我是首页</div> -->
 		<!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
 		<div class="contentWrap">
-			<div class="contentBlock" v-for="item in homepageList.data" :key="item.id">
+			<div class="contentBlock" v-for="(item,idx) in homepageList.data" :key="item.id">
 				<div class="blockTop">
 					<div class="authorSrc"><img :src="item.authorImgSrc" /></div>
 					<div class="blockTitle">
@@ -31,18 +31,29 @@
 							<span class="like" style="display: inline-block;" v-if="item.dislikeVisible">+1</span>
 						</transition>
 					</span>
-					<span class="commentIcon" @click="handleComment(item)"><i class="icon iconfont icon-pinglun"></i>{{item.commentCount}}</span>
+					<span class="commentIcon" @click="showCommentList(item, item.commentVisible,idx)"><i class="icon iconfont icon-pinglun"></i>{{item.commentCount}}</span>
 					<span class="shareIcon"><i class="icon iconfont icon-fenxiang"></i></span>
 				</div>
 				<!-- 评论 -->
 				<div class="commentsWrap" :class="{commentHidden:!item.commentVisible}" >
 					<div class="commentInputWrap">
-						<textarea v-model="commenContent" class="commentInput" placeholder="说点什么吧，期待您的神回复！"></textarea>
+						<textarea v-model="curCommenContent['content_'+idx]" class="commentInput" placeholder="说点什么吧，期待您的神回复！"></textarea>
 						<div class="commentOper">
-							<span class="inputTip">还可以输入<span>300</span>字</span><el-button @click="handleCommentLaugh(item.id)" type="danger">评论</el-button>
+							<span class="inputTip">还可以输入<span>300</span>字</span>
+							<el-button @click="handleCommentLaugh(item.id,idx)" type="danger">评论</el-button>
 						</div>
 					</div>
-					<div class="commentsHistory"></div>
+					<div class="commentsHistory">
+						<ul>
+							<li class="historyCommentItem" v-for="(item) in item.commentList" :key="item.id">
+								<div class="comItemImg"><img src="https://avatar.pengfu.com/small/848/6178848.jpg"/></div>
+								<div class="comItemContent">
+									<div class="comItemAuthor">{{item.username}}</div>
+									<div>{{item.content}}</div>
+								</div>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -50,6 +61,7 @@
 		</el-pagination>
 	</div>
 </template>
+
 
 <script>
 	// @ is an alias to /src
@@ -65,18 +77,18 @@
 			HelloWorld
 		},
 		data() {
-			return {  
-				commenContent:''
+			return {
+				curCommenContent:{
+				},
 			}
 		},
-		computed: mapState({
-			homepageList: (state) => {
-				return state.homepageStore.homepageList
-			},
-			getVisible: function (){
-				return this.homepageList?this.homepageList.data:[]
-			}
-		}),
+		computed: {
+			...mapState({
+				homepageList: (state) => {
+					return state.homepageStore.homepageList
+				}
+			})
+		},
 		created() {
 			this.fetchHomepageList()
 		},
@@ -85,28 +97,33 @@
 				'fetchHomepageList',
 				'changeHomepageList',
 				'toggleLikeVisible',
-				'commentLaugh'
+				'publishComment',
+				'fetchCommentList'
 			]),
 			handleChangePage(currPage) {
 				this.fetchHomepageList(currPage)
 			},
-			handleComment(comment){
+			showCommentList: async function(comment, commentVisible){
 				this.changeHomepageList(comment.id)
+				if(!commentVisible){
+					await this.fetchCommentList({laughId: comment.id})
+				}
 			},
-			handleCommentLaugh: function(laughId){
-				console.log({laughId,content: this.commenContent})
-				this.commentLaugh({laughId,content: this.commenContent})
+			handleCommentLaugh: async function(laughId,idx){
+				await this.publishComment({laughId,content: this.curCommenContent['content_'+idx]})
+				this.curCommenContent['content_'+idx]='';
 			},
 			handleLike: function( hasLike, id, type ){
-				console.log(hasLike,'hasLike')
 				if(!hasLike){
-					this.toggleLikeVisible({id,type}) 
+					this.toggleLikeVisible({id,type})
 				}
 			}
+		},
+		beforeEnter: (to, from, next) => {
+			console.log(11111111,to, from, next)
 		}
 	}
 </script>
-
 <style scoped lang="less">
 	.contentWrap {
 		width: 645px;
@@ -202,6 +219,37 @@
 				}
 				&.commentHidden{
 					display: none;
+				}
+				// 评论
+				.commentsHistory{
+					padding-top: 15px;
+					&>ul{
+						padding-left: 0;
+						max-height: 450px;
+						overflow: auto;
+					}
+					.historyCommentItem{
+						display: flex;
+						font-size: 14px;
+						padding: 6px 10px 10px 10px;
+						border-bottom: 1px solid #ddd;
+						margin-bottom: 10px;
+						.comItemImg{
+							width: 40px;
+							&>img{
+								border-radius: 100%;
+								width: 100%;
+							}
+						}
+						.comItemContent{
+							padding-left: 10px;
+							text-align: left;
+							flex: 1;
+							.comItemAuthor{
+								color: #2fae85;
+							}
+						}
+					}
 				}
 			}
 

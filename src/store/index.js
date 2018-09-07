@@ -6,7 +6,7 @@ import aboutStore from './modules/aboutStore';
 import headerStore from './modules/headerStore';
 import loginStore from './modules/loginStore';
 import homepageStore from './modules/homepageStore';
-import militaryStore from './modules/militaryStore'
+import militaryStore from './modules/militaryStore';
 
 Vue.use(Vuex);
 
@@ -15,7 +15,8 @@ export default new Vuex.Store({
     state: {
         rootCount: 0,
         loginStatus: false,
-        username: ''
+        username: '',
+        headerVisible: false
     },
     mutations: {
         toggleLoginStatus (state, payload) {
@@ -24,6 +25,9 @@ export default new Vuex.Store({
         },
         toggleUsername (state, payload) {
             state.username = payload.username;
+        },
+        toggleHeaderVisible (state, payload) { 
+            state.headerVisible = payload.visible;
         }
     },
     actions: {
@@ -38,6 +42,12 @@ export default new Vuex.Store({
             ctx.commit({
                 type: 'toggleUsername',
                 username: payload.username
+            });
+        },
+        toggleHeaderVisible ({commit}, payload) {
+            commit({
+                type: 'toggleHeaderVisible',
+                visible: payload
             });
         }
     },
