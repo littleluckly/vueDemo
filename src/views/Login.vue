@@ -47,6 +47,7 @@
 	// const {
 	// 	mapActions
 	// } = createNamespacedHelpers('loginStore')
+	import { mapActions } from 'vuex'
 	export default {
 		data() {
 			var checkAge = (rule, value, callback) => {
@@ -120,8 +121,18 @@
 								}
 							}).then((res) => {
 								this.loginLoading='';
-								if (res.data.status === "ok") { 
-									this.$router.push('/') 
+								if (res.data.status === "ok") {
+									this.$router.push('/')
+									const {
+										dispatch,
+										commit
+									} = this.$store;
+									dispatch('toggleLoginStatus', {
+										flag: true
+									})
+									dispatch('toggleUsername', {
+										username: this.loginForm.username
+									})
 								} else {
 									this.$message.error(res.data.msg);
 								}
@@ -148,10 +159,7 @@
 								}
 							}).then((res) => {
 								this.loginLoading='';
-								console.log(2,this)
 								if (res.data.status === "ok") {
-									jsCookie.set('auth', 'true222')
-									jsCookie.set('username', this.signUpForm.username)
 									this.$router.push('/')
 									const {
 										dispatch,
@@ -188,7 +196,7 @@
 				} else {
 					this.resetForm('loginForm')
 				}
-			} 
+			},
 		},
 	}
 </script>

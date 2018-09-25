@@ -1,3 +1,7 @@
+const path = require('path');
+function resolve (dir) {
+    return path.join(__dirname, dir)
+}
 module.exports = {
     // 项目部署的基础路径
     // 我们默认假设你的应用将会部署在域名的根部，
@@ -18,6 +22,12 @@ module.exports = {
     // 有效的值：`ture` | `false` | `"error"`
     // 当设置为 `"error"` 时，检查出的错误会触发编译失败。
     lintOnSave: true,
+    chainWebpack: (config)=>{
+        config.resolve.alias
+            .set('@', resolve('src'))
+            .set('assets',resolve('src/assets'))
+            .set('components',resolve('src/components'))
+    },
 
     // 使用带有浏览器内编译器的完整构建版本
     // 查阅 https://cn.vuejs.org/v2/guide/installation.html#运行时-编译器-vs-只包含运行时

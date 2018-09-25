@@ -42,10 +42,7 @@ const router = new Router({
         {
             path: '/login',
             name: 'Login',
-            component: Login,
-            meta: {
-                requiresAuth: true
-            }
+            component: Login
         },
         {
             path: '/overseaPackageTour',
@@ -96,7 +93,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (!jsCookie.get('auth')) {
+        if (!jsCookie.get('token')) {
             next({
                 path: '/login',
                 query: { redirect: to.fullPath }

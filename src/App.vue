@@ -15,44 +15,61 @@
 <script>
 	import jsCookie from 'js-cookie'
 	import Header from './components/Header.vue'
-	import { mapActions, mapState } from 'vuex'
+	import {
+		mapActions,
+		mapState
+	} from 'vuex'
 	export default {
 		components: {
 			Header
 		},
-		data(){
+		data() {
 			return {
 				username: ''
 			}
 		},
 		created() {
-			this.username=jsCookie.get('username') ;
-			this.toggleHeaderVisible(true)
+			console.log('11111', this.$route)
+			// this.username=jsCookie.get('username') ;
+			// 页面刷新时从cookie获取登陆信息保存在vuex中
+			this.toggleUsername({
+				username: jsCookie.get('username')
+			});
+			if (this.$route.name !== 'perCenter' && this.$route.name !== 'Login') {
+				this.toggleHeaderVisible(true)
+			} else {
+				this.toggleHeaderVisible(false)
+			}
 		},
 		computed: {
 			...mapState({
 				headerVisible: state => {
-					// console.log('state',state)
 					return state.headerVisible;
 				}
 			})
 		},
 		methods: {
-			...mapActions(['toggleHeaderVisible'])
+			...mapActions([
+				'toggleHeaderVisible',
+				'toggleUsername'
+			])
 		},
 		watch: {
-			'$route' (to, from) { 
-				if(to.name !=='perCenter'){
+			'$route' (to, from) {
+				// 登陆页、个人中心页不需要现实Header组件
+				if (to.name !== 'perCenter' && to.name !== 'Login') {
 					this.toggleHeaderVisible(true)
+				} else {
+					this.toggleHeaderVisible(false)
 				}
 			}
 		}
 	}
 </script>
 
-<style >
+<style>
 	@import "./assets/icon/iconfont.css";
-	body{
+	body {
 		background: #f2f2f2;
 	}
 	#app {
@@ -60,7 +77,7 @@
 		margin: 0 auto;
 		background-color: #f2f2f2;
 	}
-	.el-container{
+	.el-container {
 		flex-direction: column;
 	}
 	.el-header,

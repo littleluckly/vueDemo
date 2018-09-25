@@ -9,7 +9,8 @@
                 <el-menu-item index="/mailSteamerTour">邮轮游</el-menu-item>
                 <el-menu-item index="/about">关于</el-menu-item>
                 <!-- <el-submenu index="2">
-                    <template slot="title">跟团游</template>
+                        <template slot="title">跟团游
+</template>
                     <el-menu-item index="/overseaPackageTour">出境跟团</el-menu-item>
                     <el-menu-item index="/interPackageTour">国内跟团</el-menu-item>
                     <el-menu-item index="/aroundPackageTour">周边跟团</el-menu-item>
@@ -35,34 +36,31 @@
     import jsCookie from 'js-cookie'
     import axios from 'axios'
     import {
-        createNamespacedHelpers
-    } from 'vuex'
-    const {
         mapGetters,
-        mapActions,
         mapState
-    } = createNamespacedHelpers('headerStore')
+    } from 'vuex'
     export default {
         data() {
             return {
                 activeIndex: '1',
                 activeIndex2: '1',
-                username:''
             };
         },
-		created() {
-            this.username=jsCookie.get('username') ;
-		},
         computed: {
-            // ...mapGetters(['username'])
+            ...mapState([
+                'username',
+                'loginStatus'
+            ])
+            // username(){
+            //     return this.$store.state.username
+            // }
         },
         methods: {
             handleSelect(key, keyPath) {
                 this.$router.push(key);
             },
-            linkTo(){
+            linkTo() {
                 this.$router.push('/perCenter');
-                // window.open('/perCenter')
             },
             logout() {
                 const {
@@ -72,14 +70,6 @@
                 jsCookie.remove('auth')
                 jsCookie.remove('username')
                 this.$router.push('/login')
-                // axios({
-                //     method: 'get',
-                //     url: '/login/logout'
-                // }).then(res=>{
-                //     if(res.data==="ok"){
-                //         this.$router.push('/login')
-                //     }
-                // })
             }
         }
     }
@@ -100,7 +90,7 @@
                     margin-right: 6px;
                 }
             }
-            .el-dropdown{
+            .el-dropdown {
                 height: 40px;
             }
         }
