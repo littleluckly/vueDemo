@@ -41,12 +41,7 @@
 <script>
 	import jsCookie from 'js-cookie'
 	import axios from 'axios'
-	// import {
-	// 	createNamespacedHelpers
-	// } from 'vuex'
-	// const {
-	// 	mapActions
-	// } = createNamespacedHelpers('loginStore')
+	import request from '@/utils/request'
 	import { mapActions } from 'vuex'
 	export default {
 		data() {
@@ -113,7 +108,7 @@
 					this.loginLoading='el-icon-loading';
 					if (valid) {
 						setTimeout(() => {
-							axios({
+							this.$request({
 								method: 'post',
 								url: '/login/signIn',
 								data: {
@@ -151,7 +146,7 @@
 					if (valid) {
 						this.loginLoading='el-icon-loading';
 						setTimeout(() => {
-							axios({
+							this.$request({
 								method: 'post',
 								url: '/login/signUp',
 								data: {

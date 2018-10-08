@@ -6,5 +6,10 @@ const service = axios.create({
 })
 ;
 service.interceptors.request.use(config => {
+    config.headers['token']= store.getters.token
     return config;
+}, error=>{
+    console.log(error)
+    Promise.reject(error)
 });
+export default service;

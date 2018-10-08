@@ -8,5 +8,8 @@ export default {
     },
     toggleHeaderVisible (state, payload) {
         state.headerVisible = payload.visible;
-    }
+    },
+    saveToken (state, token) {
+        state.token = token;
+    },
 }

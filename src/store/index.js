@@ -11,6 +11,7 @@ import aboutStore from './modules/aboutStore';
 import headerStore from './modules/headerStore';
 import homepageStore from './modules/homepageStore';
 import militaryStore from './modules/militaryStore';
+import perCentStore from './modules/perCentStore';
 
 Vue.use(Vuex);
 
@@ -25,6 +26,7 @@ export default new Vuex.Store({
         aboutStore,
         headerStore,
         homepageStore,
-        militaryStore
+        militaryStore,
+        perCentStore,
     }
 });

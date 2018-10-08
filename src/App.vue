@@ -4,10 +4,9 @@
 			<el-header v-if="headerVisible">
 				<Header/>
 			</el-header>
-			<el-main class="mainWrap">
+			<el-main class="mainWrap" :class="{active:headerVisible}">
 				<router-view/>
 			</el-main>
-			<el-footer v-if="username">Footer</el-footer>
 		</el-container>
 	</div>
 </template>
@@ -25,21 +24,20 @@
 		},
 		data() {
 			return {
-				username: ''
+				mainStyle:{}
 			}
 		},
 		created() {
-			console.log('11111', this.$route)
-			// this.username=jsCookie.get('username') ;
 			// 页面刷新时从cookie获取登陆信息保存在vuex中
 			this.toggleUsername({
 				username: jsCookie.get('username')
 			});
+			this.$store.commit('saveToken', jsCookie.get('token'))
 			if (this.$route.name !== 'perCenter' && this.$route.name !== 'Login') {
 				this.toggleHeaderVisible(true)
 			} else {
 				this.toggleHeaderVisible(false)
-			}
+			};
 		},
 		computed: {
 			...mapState({
@@ -56,7 +54,7 @@
 		},
 		watch: {
 			'$route' (to, from) {
-				// 登陆页、个人中心页不需要现实Header组件
+				// 登陆页、个人中心页不需要显示Header组件
 				if (to.name !== 'perCenter' && to.name !== 'Login') {
 					this.toggleHeaderVisible(true)
 				} else {
@@ -67,10 +65,16 @@
 	}
 </script>
 
-<style>
+<style lang="less">
 	@import "./assets/icon/iconfont.css";
+	html,
+	body,
+	#app {
+		height: 100%;
+	}
 	body {
 		background: #f2f2f2;
+		margin: 0;
 	}
 	#app {
 		width: 1300px;
@@ -80,12 +84,17 @@
 	.el-container {
 		flex-direction: column;
 	}
-	.el-header,
-	.el-footer {
+	.el-header {
+		position: fixed;
+		padding: 0;
+		height: 60px;
+		width: 1300px;
 		background-color: #fff;
 		color: #333;
 		text-align: center;
 		line-height: 60px;
+		z-index: 10000;
+		box-shadow: 0 2px 1px 1px #ddd;
 	}
 	.el-aside {
 		background-color: #D3DCE6;
@@ -94,13 +103,13 @@
 		line-height: 200px;
 	}
 	.el-main {
-		margin-top: 10px;
-		padding-left: 0;
-		/* background-color: #fff; */
+		padding: 0;
 		color: #333;
 		text-align: center;
 		min-height: calc(100vh - 50px);
-		/* line-height: 160px; */
+	}
+	.mainWrap.active{
+		margin-top: 70px;
 	}
 	body>.el-container {
 		margin-bottom: 40px;

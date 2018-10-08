@@ -1,5 +1,4 @@
-
-import axios from 'axios';
+import request from '@/utils/request'
 export default {
     namespaced: true,
     state: {
@@ -56,7 +55,7 @@ export default {
         fetchHomepageList ({commit}, pageNo) {
             const newPageNo = pageNo || 1;
             commit('paginationChange', newPageNo);
-            axios({
+            request({
                 method: 'post',
                 url: '/homepage/hot',
                 data: {
@@ -82,7 +81,7 @@ export default {
         // 点赞点踩
         toggleLikeVisible ({commit, dispatch}, payload) {
             const { type, id, pageNo } = payload;
-            axios({
+            request({
                 method: 'post',
                 url: '/homepage/like',
                 data: {
@@ -100,7 +99,7 @@ export default {
         publishComment ({commit, dispatch, state}, payload) {
             const { pageNo } = state.pagination;
             const { laughId } = payload;
-            axios({
+            request({
                 method: 'post',
                 url: '/homepage/comment',
                 data: {
@@ -113,7 +112,7 @@ export default {
         // 获取评论列表
         fetchCommentList ({commit, dispatch, state}, payload) {
             const { laughId } = payload;
-            axios({
+            request({
                 method: 'post',
                 url: '/homepage/getCommentList',
                 data: {
