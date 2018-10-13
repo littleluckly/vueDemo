@@ -3,7 +3,10 @@ export default {
     namespaced: true,
     state: {
         homepageList: {},
-        pagination: { },
+        pagination: {
+            pageNo: 1,
+            pageSize: 10,
+        },
         historyCommentList: {}
     },
     mutations: {
@@ -18,8 +21,11 @@ export default {
                 return comment;
             });
         },
-        paginationChange (state, payload) {
-            state.pagination.pageNo = payload;
+        changeLaughPage(state, pageNo){
+            state.pagination.pageNo=pageNo;
+        },
+        paginationChange (state, {pageNo}) {
+            state.pagination.pageNo = pageNo;
         },
         // 点赞或点踩
         toggleLikeVisible (state, payload) {
@@ -27,7 +33,6 @@ export default {
             state.homepageList.data = state.homepageList.data.map(comment => {
                 if (comment.id === id) {
                     comment[type + 'Visible'] = true;
-                    comment.hasLike = type;
                 }
                 return comment;
             });
@@ -52,9 +57,10 @@ export default {
         }
     },
     actions: {
-        fetchHomepageList ({commit}, pageNo) {
-            const newPageNo = pageNo || 1;
-            commit('paginationChange', newPageNo);
+        fetchHomepageList ({commit,state}, pageNo) {
+            console.log(state.pagination)
+            const newPageNo = state.pagination.pageNo
+            commit('paginationChange', {pageNo:newPageNo});
             request({
                 method: 'post',
                 url: '/homepage/hot',
@@ -78,26 +84,32 @@ export default {
         changeHomepageList ({commit}, payload) {
             commit('changeHomepageList', payload);
         },
+        changeLaughPage({commit,dispatch},pageNo) {
+            commit('changeLaughPage', pageNo);
+            dispatch('fetchHomepageList',pageNo)
+        },
         // 点赞点踩
         toggleLikeVisible ({commit, dispatch}, payload) {
-            const { type, id, pageNo } = payload;
+            const { type, id, pageNo,likeType } = payload;
             request({
                 method: 'post',
                 url: '/homepage/like',
                 data: {
                     laughId: id,
-                    type
+                    type,
+                    likeType
                 }
             }).then((res) => {
-                if (res && res.data.message === '') {
+                // if (res && res.data.message === '') {
                     commit('toggleLikeVisible', payload);
-                    dispatch('fetchHomepageList', pageNo);
-                }
+                    dispatch('fetchHomepageList')
+                    // dispatch('fetchHomepageList', pageNo);
+                // }
             });
         },
         // 发表评论
         publishComment ({commit, dispatch, state}, payload) {
-            const { pageNo } = state.pagination;
+            // const { pageNo } = state.pagination;
             const { laughId } = payload;
             request({
                 method: 'post',

@@ -18,18 +18,18 @@
 				</div>
 				<div class="blockBottom">
 					<!-- 点赞 -->
-					<span class="likeIcon" :class="{active:item.hasLike=='like'}" @click="handleLike(item.hasLike,item.id,'like')">
-							<i class="icon iconfont icon-like"></i>{{item.likeCount}}
+					<span class="likeIcon" :class="{active:item.likeType==1}" @click="handleLike(item.likeType,item.id,'like')">
+							<i class="icon iconfont" :class="{'icon-like':item.likeType!=1,'icon-dianzan':item.likeType==1}"></i>{{item.likeCount}}
 							<transition name="like">
 								<span class="like" style="display: inline-block;" v-if="item.likeVisible">+1</span>
-					</transition>
+							</transition>
 					</span>
 					<!-- 点踩 -->
-					<span class="dislikeIcon" :class="{active:item.hasLike=='dislike'}" @click="handleLike(item.hasLike,item.id,'dislike')">
-							<i class="icon iconfont icon-dislike"></i>{{item.dislikeCount}}
+					<span class="dislikeIcon" :class="{active:item.likeType==0}" @click="handleLike(item.likeType,item.id,'dislike')">
+							<i class="icon iconfont" :class="{'icon-dislike':item.likeType!=0,'icon-dislike-b':item.likeType==0}"></i>{{item.dislikeCount}}
 							<transition name="like">
 								<span class="like" style="display: inline-block;" v-if="item.dislikeVisible">+1</span>
-					</transition>
+							</transition>
 					</span>
 					<span class="commentIcon" @click="showCommentList(item, item.commentVisible,idx)"><i class="icon iconfont icon-pinglun"></i>{{item.commentCount}}</span>
 					<span class="shareIcon"><i class="icon iconfont icon-fenxiang"></i></span>
@@ -57,7 +57,7 @@
 				</div>
 			</div>
 		</div>
-		<el-pagination background layout="prev, pager, next" :total="homepageList.total" @current-change="handleChangePage">
+		<el-pagination background layout="prev, pager, next" :total="homepageList.total" :current-page="laughPagination.pageNo" @current-change="handleChangePage">
 		</el-pagination>
 	</div>
 </template>
@@ -84,7 +84,8 @@
 			...mapState({
 				homepageList: state => {
 					return state.homepageStore.homepageList;
-				}
+				},
+				laughPagination: state => state.homepageStore.pagination
 			})
 		},
 		created() {
@@ -96,10 +97,12 @@
 				"changeHomepageList",
 				"toggleLikeVisible",
 				"publishComment",
-				"fetchCommentList"
+				"fetchCommentList",
+				"changeLaughPage",
 			]),
 			handleChangePage(currPage) {
-				this.fetchHomepageList(currPage);
+				this.changeLaughPage(currPage)
+				// this.fetchHomepageList(currPage);
 			},
 			showCommentList: async function(comment, commentVisible) {
 				this.changeHomepageList(comment.id);
@@ -116,13 +119,12 @@
 				});
 				this.curCommenContent["content_" + idx] = "";
 			},
-			handleLike: function(hasLike, id, type) {
-				if (!hasLike) {
-					this.toggleLikeVisible({
-						id,
-						type
-					});
-				}
+			handleLike: async function (likeType, id, type) {
+				await this.toggleLikeVisible({
+					likeType,
+					id,
+					type
+				});
 			}
 		},
 		beforeEnter: (to, from, next) => {
@@ -172,6 +174,9 @@
 					line-height: 40px;
 					text-align: center;
 					cursor: pointer; // font-size: 28px;
+					.icon-dianzan{
+						color: #ff6666;
+					}
 					&.active {
 						color: #ff6666;
 					}
