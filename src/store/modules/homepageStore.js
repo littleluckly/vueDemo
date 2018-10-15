@@ -57,29 +57,18 @@ export default {
         }
     },
     actions: {
-        fetchHomepageList ({commit,state}, pageNo) {
-            console.log(state.pagination)
+        async fetchHomepageList ({commit,state}, pageNo) {
             const newPageNo = state.pagination.pageNo
             commit('paginationChange', {pageNo:newPageNo});
-            request({
+            const result = await request({
                 method: 'post',
                 url: '/homepage/hot',
                 data: {
                     pageNo: newPageNo,
                     pageSize: 10
                 }
-            }).then((res) => {
-                commit('fetchHomepageList', res.data);
-                // pageNo&&(document.documentElement.scrollTop = 0)
-                // let timer = setInterval(function () {
-                //     let osTop = document.documentElement.scrollTop || document.body.scrollTop;
-                //     let speed = Math.floor(-osTop / 6);
-                //     document.documentElement.scrollTop = document.body.scrollTop = osTop + speed;
-                //     if (osTop <= 0) {
-                //         clearInterval(timer);
-                //     }
-                // }, 30);
-            });
+            })
+            commit('fetchHomepageList', result.data);
         },
         changeHomepageList ({commit}, payload) {
             commit('changeHomepageList', payload);
@@ -89,9 +78,9 @@ export default {
             dispatch('fetchHomepageList',pageNo)
         },
         // 点赞点踩
-        toggleLikeVisible ({commit, dispatch}, payload) {
+        async toggleLikeVisible ({commit, dispatch}, payload) {
             const { type, id, pageNo,likeType } = payload;
-            request({
+            const result = await request({
                 method: 'post',
                 url: '/homepage/like',
                 data: {
@@ -99,40 +88,34 @@ export default {
                     type,
                     likeType
                 }
-            }).then((res) => {
-                // if (res && res.data.message === '') {
-                    commit('toggleLikeVisible', payload);
-                    dispatch('fetchHomepageList')
-                    // dispatch('fetchHomepageList', pageNo);
-                // }
             });
+            dispatch('fetchHomepageList')
+            commit('toggleLikeVisible', payload);
+
         },
         // 发表评论
-        publishComment ({commit, dispatch, state}, payload) {
-            // const { pageNo } = state.pagination;
+        async publishComment ({commit, dispatch, state}, payload) {
             const { laughId } = payload;
-            request({
+            const result = await request({
                 method: 'post',
                 url: '/homepage/comment',
                 data: {
                     ...payload
                 }
-            }).then((res) => {
-                dispatch('fetchCommentList', {laughId});
             });
+            dispatch('fetchCommentList', {laughId});
         },
         // 获取评论列表
-        fetchCommentList ({commit, dispatch, state}, payload) {
+        async fetchCommentList ({commit, dispatch, state}, payload) {
             const { laughId } = payload;
-            request({
+            const result = await request({
                 method: 'post',
                 url: '/homepage/getCommentList',
                 data: {
                     laughId
                 }
-            }).then((res) => {
-                commit('fetchCommentList', {laughId, historyCommentList: res.data});
             });
+            commit('fetchCommentList', {laughId, historyCommentList: result.data});
         }
     }
 };

@@ -26,7 +26,7 @@
 						<el-input type="password" v-model="signUpForm.passAgain" auto-complete="off" placeholder="请再次输入密码"></el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="handleSignUp('signUpForm')" class="loginBtn" :icon="loginLoading" :disabled="loginDisabled">注册</el-button>
+						<el-button type="primary" @click="handleSignIn('signUpForm')" class="loginBtn" :icon="loginLoading" :disabled="loginDisabled">注册</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -103,38 +103,36 @@
 			}
 		},
 		methods: {
-			handleSignIn(formName) {
+			handleSignIn(formName,type) {
 				this.$refs[formName].validate((valid) => {
 					this.loginLoading='el-icon-loading';
 					if (valid) {
-						setTimeout(() => {
-							this.$request({
+						const url = formName==='loginForm'?'/login/signIn':'/login/signUp';
+						setTimeout(async() => {
+							const result = await this.$request({
 								method: 'post',
-								url: '/login/signIn',
+								url,
 								data: {
-									...this.loginForm
+									...this[formName]
 								}
-							}).then((res) => {
-								this.loginLoading='';
-								if (res.data.status === "ok") {
-									this.$router.push('/')
-									const {
-										dispatch,
-										commit
-									} = this.$store;
-									dispatch('toggleLoginStatus', {
-										flag: true
-									})
-									dispatch('toggleUsername', {
-										username: this.loginForm.username
-									})
-								} else {
-									this.$message.error(res.data.msg);
-								}
-							}, (res) => {
-								this.loginLoading='';
-							});
-						}, 1000);
+							})
+							this.loginLoading='';
+							if (result.data.status === "ok") {
+								this.$router.push('/')
+								const {
+									dispatch,
+									commit
+								} = this.$store;
+								dispatch('toggleLoginStatus', {
+									flag: true
+								})
+								dispatch('toggleUsername', {
+									username: this[formName].username
+								})
+							} else {
+								this.$message.error(result.data.msg);
+							}
+						}, 600);
 					} else {
 						console.log('error submit!!');
 						return false;
@@ -145,36 +143,32 @@
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
 						this.loginLoading='el-icon-loading';
-						setTimeout(() => {
-							this.$request({
+						setTimeout(async() => {
+							const result = await this.$request({
 								method: 'post',
 								url: '/login/signUp',
 								data: {
 									...this.signUpForm
 								}
-							}).then((res) => {
-								this.loginLoading='';
-								if (res.data.status === "ok") {
-									this.$router.push('/')
-									const {
-										dispatch,
-										commit
-									} = this.$store;
-									dispatch('toggleLoginStatus', {
-										flag: true
-									})
-									dispatch('toggleUsername', {
-										username: this.signUpForm.username
-									})
-									this.$message.success('注册成功');
-								} else {
-									this.$message.error(res.data.msg);
-								}
-							}, (res) => {
-								alert('error')
-								this.loginLoading='';
 							});
-						}, 1800);
+							this.loginLoading='';
+							if (result.data.status === "ok") {
+								this.$router.push('/')
+								const {
+									dispatch,
+									commit
+								} = this.$store;
+								dispatch('toggleLoginStatus', {
+									flag: true
+								})
+								dispatch('toggleUsername', {
+									username: this.signUpForm.username
+								})
+								this.$message.success('注册成功');
+							} else {
+								this.$message.error(result.data.msg);
+							}
+						}, 1000);
 					} else {
 						console.log('error submit!!');
 						return false;
