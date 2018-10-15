@@ -84,6 +84,9 @@
         .userOper {
             width: 100px;
             float: right;
+            &:hover{
+                background: #f2f2f2;
+            }
             .userOperBtn {
                 cursor: pointer;
                 >i {

@@ -17,6 +17,13 @@ export default {
             form.validate(valid=>{
                 if(valid){
                     console.log(state.userInfoData)
+                    request({
+                        method:'post',
+                        url:'/users/updateUserInfo',
+                        data:state.userInfoData
+                    }).then(res=>{
+                        console.log('res',res)
+                    })
                     // commit('saveUserInfo',{username:'更新后的数据'})
                 }
             })

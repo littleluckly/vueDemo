@@ -13,12 +13,12 @@
                         </el-form-item>
                         <el-form-item label="性别" prop="gender" style="text-align:left;">
                             <el-radio-group v-model="userInfoData.gender">
-                                <el-radio label="男">男</el-radio>
-                                <el-radio label="女">女</el-radio>
+                                <el-radio label="男" value="1">男</el-radio>
+                                <el-radio label="女" value="2">女</el-radio>
                             </el-radio-group>
                         </el-form-item>
-                        <el-form-item label="简介" prop="intro">
-                            <el-input type="textarea" v-model="userInfoData.intro" placeholder="请输入简介"></el-input>
+                        <el-form-item label="简介" prop="desc">
+                            <el-input type="textarea" v-model="userInfoData.desc" placeholder="请输入简介"></el-input>
                         </el-form-item>
                         <el-form-item class="operWrap">
                             <el-button type="danger" @click="resetUserInfoForm('userInfo')" class="loginBtn">重置</el-button>
