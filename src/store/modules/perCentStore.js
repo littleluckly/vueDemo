@@ -10,23 +10,40 @@ export default {
         }
     },
     actions: {
-        fetchUserInfo({commit}, params){
-            commit('saveUserInfo',{username:'测试的数据'})
-        },
-        updateUserInfo({commit,state}, {form}){
-            form.validate(valid=>{
-                if(valid){
-                    console.log(state.userInfoData)
-                    request({
-                        method:'post',
-                        url:'/users/updateUserInfo',
-                        data:state.userInfoData
-                    }).then(res=>{
-                        console.log('res',res)
-                    })
-                    // commit('saveUserInfo',{username:'更新后的数据'})
-                }
+        // 获取个人信息
+        async fetchUserInfo({commit}, params){
+            const result = await request({
+                method:'post',
+                url:'/users/fetchUserInfo',
             })
+            commit('saveUserInfo', {...result.data,host:result.host})
         },
+        // 更新个人信息
+        updateUserInfo({commit,state}, {form}){
+            return new Promise((resolve,reject)=>{
+                form.validate( async valid=>{
+                    if(valid){
+                        const result = await request({
+                            method:'post',
+                            url:'/users/updateUserInfo',
+                            data:state.userInfoData
+                        });
+                        resolve(result.data);
+                    }
+                })
+            });
+
+        },
+        // 更新头像
+        async updateUserAvatar({commit,dispatch}, avatar){
+            const result = await request({
+                method:'post',
+                url:'/users/updateUserAvatar',
+                data: {avatar}
+            });
+            if(result.data.status==='ok'){
+                dispatch('fetchUserInfo')
+            }
+        }
     },
 };

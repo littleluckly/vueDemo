@@ -90,6 +90,11 @@ module.exports = {
                 ws: true,
                 changeOrigin: true
             },
+            '/doc/*': {
+                target: 'http://127.0.0.1:5577',
+                ws: true,
+                changeOrigin: true
+            },
             '/homepage/*': {
                 target: 'http://127.0.0.1:5577',
                 ws: true,

@@ -67,7 +67,7 @@ export default {
                     pageNo: newPageNo,
                     pageSize: 10
                 }
-            })
+            }) 
             commit('fetchHomepageList', result.data);
         },
         changeHomepageList ({commit}, payload) {
