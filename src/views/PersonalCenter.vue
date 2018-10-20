@@ -7,8 +7,15 @@
                     <el-form :model="userInfoData" :rules="rules2" ref="userInfo" label-width="180px" class="userInfoWrap">
                         <el-form-item label="头像" prop="avatar">
                             <div class="user-avatar">
-                                <img :src="userInfoData.host+userInfoData.avatar" />
-                                <el-upload class="upload-demo" action="/doc/uploadFile" ref="elupload" :show-file-list=false :on-success="showUploadModal">
+                                <img :src="avatarSrc" />
+                                <el-upload
+                                    class="upload-demo"
+                                    action="/doc/uploadFile"
+                                    ref="elupload"
+                                    :show-file-list=false
+                                    :on-success="showUploadModal"
+                                    :on-change="handleFileChange"
+                                    >
                                     <div class="uploadBtn">
                                         <i class="el-icon-picture"></i>
                                         <div>修改我的头像</div>
@@ -56,42 +63,35 @@
                 </el-tab-pane>
             </el-tabs>
         </div>
+
+        <el-dialog
+            title="头像编辑"
+            :visible.sync="avatarDialogVisible"
+            width="30%">
+            <!-- <canvas id="canEle"></canvas> -->
+            <div class="avatar-preview-wrap"><img class="avatar-preview" :src="userAvatar.host+userAvatar.src"/></div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="cancelAvatarDialog">取 消</el-button>
+                <el-button type="primary" @click="handleUpdateUserAvatar">确 定</el-button>
+            </span>
+            </el-dialog>
+
     </div>
 </template>
 
 <script>
-    import cheerio from 'cheerio'
+    import { validIsEmpty, validateAgain } from 'utils/helper'
+    import avatarSrc from '../assets/img/default_avatar.jpg'
     import {
         mapActions,
         mapState,
     } from 'vuex'
     export default {
         data() {
-            const validIsEmpty = (rule, value, callback, errorText) => {
-                if (!value) {
-                    callback(new Error(errorText));
-                } else {
-                    callback();
-                }
-            };
-            var validateUserName = (rule, value, callback) => {
-                if (!value) {
-                    callback(new Error('用户名不能为空'));
-                } else {
-                    callback();
-                }
-            };
-			var validatePassAgain = (rule, value, callback) => {
-				if (!value) {
-					callback(new Error('请再次输入密码'));
-				} else if (value !== this.userPwdData.newPwd) {
-					callback(new Error('两次输入密码不一致!'));
-				} else {
-					callback();
-				}
-			};
             return {
                 activeName: 'infoTab',
+                avatarDialogVisible: false,
+                userAvatar: {},
                 userInfo: {
                     username: ''
                 },
@@ -102,21 +102,21 @@
                 },
                 rules2: {
                     username: [{
-                        validator: validateUserName,
+                        validator: (rule, value, callback)=>validIsEmpty({value, callback, errorText:'用户名不能为空'}),
                         trigger: 'blur'
                     }],
                 },
 				rules1: {
 					checkPwd: [{
-						validator: validatePassAgain,
+						validator: (rule, value, callback)=>validateAgain({value, preValue:this.userPwdData.newPwd, callback, errorText:'请再次输入密码', errorTextAgain:'两次输入密码不一致'}),
 						trigger: 'blur'
 					}],
 					oriPwd: [{
-						validator: (rule, value, callback)=>validIsEmpty(rule, value, callback, '请输入原密码'),
+						validator: (rule, value, callback)=>validIsEmpty({value, callback, errorText:'请输入原密码'}),
 						trigger: 'blur'
 					}],
 					newPwd: [{
-						validator: (rule, value, callback)=>validIsEmpty(rule, value, callback, '请输入密码'),
+						validator: (rule, value, callback)=>validIsEmpty({value, callback, errorText:'请输入密码'}),
 						trigger: 'blur'
 					}],
 				}
@@ -124,7 +124,7 @@
             };
         },
         created() {
-            this.toggleHeaderVisible(false);
+            this.toggleHeaderVisible({currRoute:this.$route.name});
             this.fetchUserInfo()
         },
         computed: {
@@ -132,7 +132,11 @@
                 userInfoData: state => {
                     return state.perCentStore.userInfoData;
                 }
-            })
+            }),
+            avatarSrc(){
+                // E:\vue-demo\vueDemo\src\assets\img\default_avatar.jpg
+                return this.userInfoData.avatar?this.userInfoData.host+this.userInfoData.avatar:avatarSrc
+            }
         },
         methods: {
             ...mapActions(['toggleHeaderVisible']),
@@ -161,24 +165,37 @@
             },
             showUploadModal(response, file, fileList) {
                 // console.log(response)
-                this.$confirm(`<div class="avatar-preview-wrap"><img class="avatar-preview" src='${response.host+response.src}'/></div>`, '图像编辑', {
-                    confirmButtonText: '保存',
-                    cancelButtonText: '取消',
-                    dangerouslyUseHTMLString: true,
-                    customClass: 'uploadModal'
-                }).then(() => {
-                    this.updateUserAvatar(response.src)
-                    // this.$message({
-                    //     type: 'success',
-                    //     message: '修改成功!'
-                    // });
-                }).catch(() => {
-                    // this.$message({
-                    //     type: 'info',
-                    //     message: '已取消删除'
-                    // });
-                });
+                this.userAvatar = response;
+                this.avatarDialogVisible = true;
             },
+            handleFileChange(file, fileList){
+                // TODO:图片转canvas,实现裁剪，压缩上传
+                // let img = new Image();
+                // img.src = window.URL.createObjectURL(file.raw);
+                // img.onload=function(){
+                //     const canvas = document.getElementById('canEle');
+                //     canvas.width=800;
+                //     canvas.height=300;
+                //     let ctx = canvas.getContext('2d');
+                //     ctx.drawImage(img,10,10,800,300)
+                // }
+            },
+            // 更新头像信息
+            async handleUpdateUserAvatar(){
+                this.avatarDialogVisible=false;
+                const result = await this.updateUserAvatar(this.userAvatar.src);
+                if(result.data.status==='ok'){
+                    this.$message({
+                        type: 'success',
+                        message: '修改成功!'
+                    });
+                }
+            },
+            cancelAvatarDialog(){
+                this.avatarDialogVisible=false;
+                this.userAvatar={};
+            },
+            // 修改密码
             updateUserPwd(){
                 this.$refs['userPwd'].validate( async valid=>{
                     if(valid){
@@ -259,11 +276,14 @@
             }
         }
     }
-    .uploadModal {
+    .el-dialog {
         width: 65% !important;
         max-height: 650px;
+        .el-dialog__header{
+            text-align: left;
+        }
         .avatar-preview {
-            max-height: 500px;
+            max-height: 400px;
             width: 100%;
         }
     }

@@ -27,6 +27,7 @@ module.exports = {
             .set('@', resolve('src'))
             .set('assets',resolve('src/assets'))
             .set('components',resolve('src/components'))
+            .set('utils',resolve('src/utils'))
     },
 
     // 使用带有浏览器内编译器的完整构建版本

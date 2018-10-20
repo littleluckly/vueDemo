@@ -43,32 +43,10 @@
 	import axios from 'axios'
 	import request from '@/utils/request'
 	import { mapActions } from 'vuex'
+	import { validIsEmpty, validateAgain } from 'utils/helper'
+	import queryString from 'query-string'
 	export default {
 		data() {
-			var checkAge = (rule, value, callback) => {
-				if (!value) {
-					callback(new Error('用户名不能为空'));
-				} else {
-					callback();
-				}
-			};
-			var validatePass = (rule, value, callback) => {
-				if (!value) {
-					callback(new Error('请输入密码'));
-				} else {
-					callback();
-				}
-			};
-			var validatePassAgain = (rule, value, callback) => {
-				this.signUpForm.passAgain
-				if (!value) {
-					callback(new Error('请再次输入密码'));
-				} else if (value !== this.signUpForm.pass) {
-					callback(new Error('两次输入密码不一致!'));
-				} else {
-					callback();
-				}
-			};
 			return {
 				isSignIn: true,
 				loginLoading: '',
@@ -83,15 +61,15 @@
 				},
 				rules2: {
 					pass: [{
-						validator: validatePass,
+						validator: (rule, value, callback)=>validIsEmpty({value, callback, errorText:'请输入密码'}),
 						trigger: 'blur'
 					}],
 					passAgain: [{
-						validator: validatePassAgain,
+						validator: (rule, value, callback)=>validateAgain({value, preValue:this.signUpForm.pass, callback, errorText:'请再次输入密码', errorTextAgain:'两次输入密码不一致'}),
 						trigger: 'blur'
 					}],
 					username: [{
-						validator: checkAge,
+						validator: (rule, value, callback)=>validIsEmpty({value, callback, errorText:'用户名不能为空'}),
 						trigger: 'blur'
 					}]
 				}
@@ -118,7 +96,14 @@
 							})
 							this.loginLoading='';
 							if (result.data.status === "ok") {
-								this.$router.push('/')
+								// token失效重新登陆后跳转到之前的页面
+								const search = window.location.href.split('?')[1]
+								const { preUrl } = queryString.parse(search)
+								if(preUrl){
+									window.location.replace(`${preUrl}`)
+								}else{
+									this.$router.push('/')
+								}
 								const {
 									dispatch,
 									commit
@@ -135,6 +120,7 @@
 						}, 600);
 					} else {
 						console.log('error submit!!');
+						this.loginLoading='';
 						return false;
 					}
 				});
@@ -171,6 +157,7 @@
 						}, 1000);
 					} else {
 						console.log('error submit!!');
+						this.loginLoading='';
 						return false;
 					}
 				});

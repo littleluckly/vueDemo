@@ -44,6 +44,7 @@ export default {
             if(result.data.status==='ok'){
                 dispatch('fetchUserInfo')
             }
+            return result;
         }
     },
 };

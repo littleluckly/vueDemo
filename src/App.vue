@@ -33,11 +33,7 @@
 				username: jsCookie.get('username')
 			});
 			this.$store.commit('saveToken', jsCookie.get('token'))
-			if (this.$route.name !== 'perCenter' && this.$route.name !== 'Login') {
-				this.toggleHeaderVisible(true)
-			} else {
-				this.toggleHeaderVisible(false)
-			};
+			this.toggleHeaderVisible({currRoute:this.$route.name})
 		},
 		computed: {
 			...mapState({
@@ -50,16 +46,13 @@
 			...mapActions([
 				'toggleHeaderVisible',
 				'toggleUsername'
-			])
+			]),
+
 		},
 		watch: {
 			'$route' (to, from) {
 				// 登陆页、个人中心页不需要显示Header组件
-				if (to.name !== 'perCenter' && to.name !== 'Login') {
-					this.toggleHeaderVisible(true)
-				} else {
-					this.toggleHeaderVisible(false)
-				}
+				this.toggleHeaderVisible({currRoute:to.name})
 			}
 		}
 	}

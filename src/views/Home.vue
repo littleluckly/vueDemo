@@ -6,15 +6,15 @@
 		<div class="contentWrap">
 			<div class="contentBlock" v-for="(item,idx) in homepageList.data" :key="item.id">
 				<div class="blockTop">
-					<div class="authorSrc"><img :src="item.authorImgSrc" /></div>
+					<div class="authorSrc"><img :src="item.author_img_src" /></div>
 					<div class="blockTitle">
-						<div>{{item.authorName}}</div>
-						<div>{{item.laughTitle}}</div>
+						<div>{{item.username}}</div>
+						<div>{{item.laugh_title}}</div>
 					</div>
 				</div>
 				<div class="blockContent">
-					<p v-if="item.type==='text'">{{item.laughText}}</p>
-					<img v-else :src="item.laughImgSrc" />
+					<p v-if="item.type==='text'">{{item.laugh_text}}</p>
+					<img v-else :src="item.laugh_img_src" />
 				</div>
 				<div class="blockBottom">
 					<!-- 点赞 -->
@@ -159,6 +159,8 @@
 			}
 			.blockContent {
 				padding: 0 15px;
+				text-align: left;
+				text-indent: 24px;
 			}
 			.blockBottom {
 				height: 44px;

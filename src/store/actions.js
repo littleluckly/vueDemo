@@ -12,10 +12,18 @@ export default {
             username: payload.username
         });
     },
-    toggleHeaderVisible ({commit}, payload) {
+    toggleHeaderVisible ({commit}, {currRoute}) {
+        // 登陆页、个人中心页不需要显示Header组件
+        let flag;
+        if (currRoute !== 'perCenter' && currRoute !== 'Login' && currRoute !== undefined) {
+            flag=true;
+        } else {
+            flag=false;
+        };
+        console.log('currRoute',currRoute)
         commit({
             type: 'toggleHeaderVisible',
-            visible: payload
+            visible: flag
         });
     }
 }
